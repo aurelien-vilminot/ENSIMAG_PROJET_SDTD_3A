@@ -12,9 +12,9 @@ sudo su;
 mv /home/kubespray/.ssh/id_rsa /root/.ssh/
 
 # Install kubespray to root directory
-cd /root;
+cd /root || exit;
 git clone https://github.com/kubernetes-sigs/kubespray.git;
-cd kubespray
+cd kubespray || exit
 mv /home/kubespray/kubespray_launcher.sh /root/kubespray/
 pip3 install -r requirements.txt;
 

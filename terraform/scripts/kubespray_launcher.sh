@@ -11,7 +11,7 @@ do
     find=0
     for (( i=0; i<${#IPS[@]}; i++ )); do
         echo "$i=${IPS[$i]}"
-        status=$(ssh -o "StrictHostKeyChecking no" $username@${IPS[$i]} command cat /var/log/syslog | grep -m 1 "startup-script exit status" | tr -d '\n' | tail -c 1)
+        status=$(ssh -o "StrictHostKeyChecking no" $username@"${IPS[$i]}" command cat /var/log/syslog | grep -m 1 "startup-script exit status" | tr -d '\n' | tail -c 1)
         case $status in
             0) # When startup-script is a success
             ;;
@@ -101,7 +101,7 @@ done
 # Remote acccess setup
 LINE_SUPP=$(cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml | grep -n 'supplementary' | cut -d ':' -f 1)
 list_ip_controller=$(echo ${IPS_CONTROLLER[@]} | sed "s/ /, /g") 
-sed -i $LINE_SUPP's/.*/supplementary_addresses_in_ssl_keys: ['${list_ip_controller}']/' inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+sed -i "$LINE_SUPP"'s/.*/supplementary_addresses_in_ssl_keys: ['${list_ip_controller}']/' inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 
 # sed -i 's/metrics_server_enabled: false/metrics_server_enabled: true/' inventory/mycluster/group_vars/k8s_cluster/addons.yml
 echo "Done.\n"
@@ -114,8 +114,8 @@ echo "Kubernetes cluster is started.\n"
 # Get remote access
 echo "Getting remote access..."
 ip_controller=${IPS_CONTROLLER}
-ssh -o "StrictHostKeyChecking no" $username@$ip_controller command "sudo chown -R ${username}:${username} /etc/kubernetes/admin.conf"
-scp $username@$ip_controller:/etc/kubernetes/admin.conf kubespray-do.conf
+ssh -o "StrictHostKeyChecking no" $username@"$ip_controller" command "sudo chown -R ${username}:${username} /etc/kubernetes/admin.conf"
+scp $username@"$ip_controller":/etc/kubernetes/admin.conf kubespray-do.conf
 sed -i -e "/.*server: https:.*/c\    server: https://${ip_controller}:6443" kubespray-do.conf
 
 echo export KUBECONFIG=$PWD/kubespray-do.conf >> /root/.bashrc

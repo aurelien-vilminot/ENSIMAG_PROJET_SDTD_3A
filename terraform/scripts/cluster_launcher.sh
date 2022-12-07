@@ -9,7 +9,7 @@ sudo apt-get install -y git python3-pip;
 
 # Install kubespray to root directory
 sudo su;
-cd /root;
+cd /root || exit;
 wget https://raw.githubusercontent.com/kubernetes-sigs/kubespray/master/requirements.txt
 wget "https://raw.githubusercontent.com/kubernetes-sigs/kubespray/master/$(cat requirements.txt)" -O install_requirements.txt
 

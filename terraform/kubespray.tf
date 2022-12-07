@@ -85,7 +85,7 @@ resource "google_compute_instance" "workstation_instance" {
         ssh-keys = "kubespray:${file("id_rsa.pub")}"
     }
 
-    metadata_startup_script = "${file("${path.module}/scripts/workstation_launcher.sh")}"
+    metadata_startup_script = file("${path.module}/scripts/workstation_launcher.sh")
 
     depends_on = [ google_compute_subnetwork.vpc_subnet, google_compute_instance.control_node_instance, google_compute_instance.worker_node_instance ]
     network_interface {
@@ -102,7 +102,7 @@ resource "google_compute_instance" "workstation_instance" {
         connection {
             host = self.network_interface.0.access_config.0.nat_ip
             user = "kubespray"
-            private_key = "${file("id_rsa")}"
+            private_key = file("id_rsa")
             agent = "false"
         }
     }
@@ -114,7 +114,7 @@ resource "google_compute_instance" "workstation_instance" {
         connection {
             host = self.network_interface.0.access_config.0.nat_ip
             user = "kubespray"
-            private_key = "${file("id_rsa")}"
+            private_key = file("id_rsa")
             agent = "false"
         }
     }
@@ -139,7 +139,7 @@ resource "google_compute_instance" "control_node_instance" {
         ssh-keys = "kubespray:${file("id_rsa.pub")}"
     }
 
-    metadata_startup_script = "${file("${path.module}/scripts/cluster_launcher.sh")}"
+    metadata_startup_script = file("${path.module}/scripts/cluster_launcher.sh")
 
     depends_on = [ google_compute_subnetwork.vpc_subnet ]
     network_interface {
@@ -166,7 +166,7 @@ resource "google_compute_instance" "worker_node_instance" {
         ssh-keys = "kubespray:${file("id_rsa.pub")}"
     }
 
-    metadata_startup_script = "${file("${path.module}/scripts/cluster_launcher.sh")}"
+    metadata_startup_script = file("${path.module}/scripts/cluster_launcher.sh")
 
     depends_on = [ google_compute_subnetwork.vpc_subnet ]
     network_interface {
@@ -192,7 +192,7 @@ resource "google_compute_instance" "prometheus_instance" {
         }
     }
 
-    metadata_startup_script = "${file("${path.module}/scripts/cluster_launcher.sh")}"
+    metadata_startup_script = file("${path.module}/scripts/cluster_launcher.sh")
 
     network_interface {
         subnetwork = google_compute_subnetwork.vpc_subnet.id

@@ -106,6 +106,16 @@ Pour exécuter Kafka en local :
 1. Defining Kafka namespace : `kubectl apply -f ./yaml/namespace.yaml`
 2.
 
+# Docker
+
+1. Se placer dans le répertoire `dev/yaml/`
+2. Saisir les commandes suivantes :
+```
+docker-compose build
+docker-compose up -d
+docker-compose exec consumer bash
+```
+
 # Performances [dev]
 
 `re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient

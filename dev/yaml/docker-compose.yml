@@ -1,0 +1,12 @@
+version: '2'
+services:
+  consumer:
+    build:
+      context: ../
+      dockerfile: ./consumer/Dockerfile
+  producer:
+    build:
+      context: ../
+      dockerfile: ./producer/Dockerfile
+    ports:
+      - "9092:9092"

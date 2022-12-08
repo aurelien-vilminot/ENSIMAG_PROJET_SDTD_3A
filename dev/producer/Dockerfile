@@ -1,5 +1,7 @@
 FROM debian:latest
 
+WORKDIR /code
+
 RUN apt update && \
     apt upgrade -y && \
     apt autoremove -y && \

@@ -10,7 +10,7 @@ RUN apt update && \
 COPY ../requirements.txt ./
 COPY ../consumer.py ./
 COPY ../config.json ./
-COPY ../data/ ./data/
+COPY ../data ./data/
 
 # Install Python dependencies
 RUN pip install -r requirements.txt

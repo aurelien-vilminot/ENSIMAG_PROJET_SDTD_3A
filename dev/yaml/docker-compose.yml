@@ -3,12 +3,12 @@ services:
   consumer:
     build:
       context: ../
-      dockerfile: ./consumer/Dockerfile
+      dockerfile: ./dockerfiles/consumer.Dockerfile
     tty: true
   producer:
     build:
       context: ../
-      dockerfile: ./producer/Dockerfile
+      dockerfile: ./dockerfiles/producer.Dockerfile
     ports:
       - "9092:9092"
     tty: true

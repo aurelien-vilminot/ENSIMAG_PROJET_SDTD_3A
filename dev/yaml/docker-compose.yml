@@ -1,5 +1,10 @@
 version: "2"
 services:
+  kafka:
+    build:
+      context: ../
+      dockerfile: ./dockerfiles/kafka.Dockerfile
+    tty: true
   consumer:
     build:
       context: ../

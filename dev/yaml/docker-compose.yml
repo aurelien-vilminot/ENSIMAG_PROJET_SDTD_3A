@@ -1,9 +1,18 @@
 version: "2"
 services:
+  zookeeper:
+    build:
+      context: ../
+      dockerfile: ./dockerfiles/zookeeper.Dockerfile
+    ports:
+      - "2181:2181"
+    tty: true
   kafka:
     build:
       context: ../
       dockerfile: ./dockerfiles/kafka.Dockerfile
+    depends_on:
+      - "zookeeper"
     tty: true
   consumer:
     build:

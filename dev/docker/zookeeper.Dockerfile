@@ -5,7 +5,7 @@ WORKDIR /code
 RUN apt update && \
     apt upgrade -y && \
     apt autoremove -y && \
-    apt install -y default-jdk net-tools telnet netcat
+    apt install -y default-jdk
 
 COPY ../kafka ./kafka
 COPY ../zookeeper.properties ./

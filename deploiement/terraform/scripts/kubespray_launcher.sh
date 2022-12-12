@@ -117,6 +117,7 @@ ssh -o "StrictHostKeyChecking no" $username@$ip_controller command "sudo chown -
 scp $username@$ip_controller:/etc/kubernetes/admin.conf kubespray-do.conf
 sed -i -e "/.*server: https:.*/c\    server: https://${ip_controller}:6443" kubespray-do.conf
 
+export KUBECONFIG=$PWD/kubespray-do.conf
 echo export KUBECONFIG=$PWD/kubespray-do.conf >> /root/.bashrc
 source /root/.bashrc
 echo "Done.\n"

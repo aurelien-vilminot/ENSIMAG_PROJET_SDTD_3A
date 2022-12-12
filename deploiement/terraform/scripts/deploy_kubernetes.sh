@@ -1,5 +1,4 @@
 # Script to deploy pods on kubernetes (App + Prometheus)
-source /root/.bashrc
 readonly username="kubespray"
 
 # Prometheus pods

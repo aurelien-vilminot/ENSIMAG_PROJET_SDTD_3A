@@ -16,6 +16,7 @@ cd /root;
 git clone https://github.com/kubernetes-sigs/kubespray.git;
 cd kubespray
 mv /home/kubespray/kubespray_launcher.sh /root/kubespray/
+mv /home/kubespray/kubectl /root/kubespray
 pip3 install -r requirements.txt;
 
 # Install kubernetes to use at remote
@@ -34,3 +35,11 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Install Helm
+sudo apt-get update
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install -y apt-transport-https
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install -y helm

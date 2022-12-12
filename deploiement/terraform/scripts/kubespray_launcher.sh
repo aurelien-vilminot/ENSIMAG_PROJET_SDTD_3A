@@ -32,25 +32,26 @@ do
 done
 echo "Done.\n"
 
-# Wait workstation VM
-echo "Waiting for workstation VM..."
-while true
-do
-    sleep 5
-    status=$(cat /var/log/syslog | grep -m 1 "startup-script exit status" | tr -d '\n' | tail -c 1)
-    case $status in
-        0) # When startup-script is a success
-        break
-        ;;
-        1) # When startup-script is a failure
-        exit 1
-        ;;
-        *) # Startup-script isn't over
-        continue
-        ;;
-    esac
-done
-echo "Done.\n"
+# Uncomment if you needed
+# # Wait workstation VM
+# echo "Waiting for workstation VM..."
+# while true
+# do
+#     sleep 5
+#     status=$(cat /var/log/syslog | grep -m 1 "startup-script exit status" | tr -d '\n' | tail -c 1)
+#     case $status in
+#         0) # When startup-script is a success
+#         break
+#         ;;
+#         1) # When startup-script is a failure
+#         exit 1
+#         ;;
+#         *) # Startup-script isn't over
+#         continue
+#         ;;
+#     esac
+# done
+# echo "Done.\n"
 
 # Setup kubespray
 echo "Starting setup..."

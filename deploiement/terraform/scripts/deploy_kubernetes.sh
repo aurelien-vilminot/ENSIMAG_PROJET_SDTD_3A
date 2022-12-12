@@ -11,3 +11,5 @@ echo "Done.\n"
 echo "Deploy App..."
 kubectl apply -f kubectl
 echo "Done.\n"
+
+echo "Everything is setup. Cluster and Apps are ready to use!"

@@ -34,11 +34,19 @@ Aurélien VILMINOT
     ```
 7. Depuis le menu, se rendre dans *Compute Engine* > *Instances de VM*
 8. Sur l'instance **workstation**, cliquer sur _SSH_
-9. Dans la nouvelle fenêtre, exécuter les commandes suivantes pour avoir accès au remote kubectl :
+9. Dans la nouvelle fenêtre, exécuter les commandes suivantes pour avoir accès au logs de l'installation du cluster :
+    ```    
+    sudo su 
+    tail -f /var/log/syslog
+    ```
+    NB: L'installation est terminée lorsque vous voyez : **Everything is setup. Cluster and Apps are ready to use!**
+10. Dans cette fenêtre, une fois l'installation terminée, exécuter les commandes suivantes pour avoir accès au remote kubectl :
     ```    
     sudo su 
     cd /root/kubespray
     source /root/.bashrc
+    kubectl get nodes
+    kubectl get pods
     ```
 
 ### Arrêt

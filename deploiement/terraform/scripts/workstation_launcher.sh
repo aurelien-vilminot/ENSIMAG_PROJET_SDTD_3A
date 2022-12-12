@@ -12,7 +12,7 @@ sudo su
 mv /home/kubespray/.ssh/id_rsa /root/.ssh/
 
 # Install kubespray to root directory
-cd /root;
+cd /root
 git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
 git checkout 09748e80e936e0479314d5a5a120a3c4bd321ffa
@@ -45,3 +45,7 @@ sudo apt-get install -y apt-transport-https
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update
 sudo apt-get install -y helm
+
+# Kubespray Launcher
+cd /root/kubespray
+bash kubespray_launcher.sh

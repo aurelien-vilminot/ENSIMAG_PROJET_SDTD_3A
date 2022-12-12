@@ -28,17 +28,17 @@ Aurélien VILMINOT
 6. Dans la console _cloud shell_ venant de s'ouvrir :
     ```
     git clone https://gitlab.ensimag.fr/brunoal/sytd
-    cd ./terraform
+    cd ./deploiement/terraform
     chmod 777 ./scripts/env.sh
     bash start.sh <id_projet_gcloud>
     ```
 7. Depuis le menu, se rendre dans *Compute Engine* > *Instances de VM*
 8. Sur l'instance **workstation**, cliquer sur _SSH_
-9. Dans la nouvelle fenêtre, exécuter les commandes suivantes :
+9. Dans la nouvelle fenêtre, exécuter les commandes suivantes pour avoir accès au remote kubectl :
     ```    
     sudo su 
     cd /root/kubespray
-    bash kubespray_launcher.sh
+    source /root/.bashrc
     ```
 
 ### Arrêt

@@ -108,13 +108,16 @@ Pour exécuter Kafka en local :
 
 # Docker
 
-1. Se placer dans le répertoire `dev/yaml/`
+1. Se placer dans le répertoire `dev/docker/`
 2. Saisir les commandes suivantes :
 ```
+docker-compose stop
 docker-compose build
 docker-compose up -d
-docker-compose exec consumer bash
 ```
+
+Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, 
+il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop.
 
 # Performances [dev]
 

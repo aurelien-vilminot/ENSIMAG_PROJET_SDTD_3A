@@ -1,6 +1,6 @@
 resource "google_compute_instance" "control_node_instance" {
     name = "controller-node"
-    machine_type = "e2-small"
+    machine_type = "e2-medium"
     tags = [ "kubespray-network", "controller", "internal", "external"] // remove external
     boot_disk {
         initialize_params {

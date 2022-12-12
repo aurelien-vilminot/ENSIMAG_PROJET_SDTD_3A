@@ -1,7 +1,7 @@
 resource "google_compute_instance" "worker_node_instance" {
     count = var.number_workers
     name = "worker-node-${count.index}"
-    machine_type = "e2-small"
+    machine_type = "e2-medium"
     tags = [ "kubespray-network", "worker", "internal", "external" ] // remove external
     boot_disk {
         initialize_params {

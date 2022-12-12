@@ -5,19 +5,21 @@ sudo sed -i "/.*nrconf{restart}.*/c\$nrconf{restart} = 'a';" /etc/needrestart/ne
 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoremove -y;
 
 # Install needed tools
-sudo apt-get install -y git python3-pip;
+sudo apt-get install -y git python3-pip
 
 # Connect as root + ssh
-sudo su;
+sudo su
 mv /home/kubespray/.ssh/id_rsa /root/.ssh/
 
 # Install kubespray to root directory
 cd /root;
-git clone https://github.com/kubernetes-sigs/kubespray.git;
+git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
+git checkout 09748e80e936e0479314d5a5a120a3c4bd321ffa
 mv /home/kubespray/kubespray_launcher.sh /root/kubespray/
 mv /home/kubespray/kubectl /root/kubespray
-pip3 install -r requirements.txt;
+mv /home/kubespray/deploy_kubernetes.sh /root/kubespray/
+pip3 install -r requirements.txt
 
 # Install kubernetes to use at remote
 sudo apt-get update

@@ -102,8 +102,6 @@ done
 LINE_SUPP=$(cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml | grep -n 'supplementary' | cut -d ':' -f 1)
 list_ip_controller=$(echo ${IPS_CONTROLLER[@]} | sed "s/ /, /g") 
 sed -i $LINE_SUPP's/.*/supplementary_addresses_in_ssl_keys: ['${list_ip_controller}']/' inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-
-# sed -i 's/metrics_server_enabled: false/metrics_server_enabled: true/' inventory/mycluster/group_vars/k8s_cluster/addons.yml
 echo "Done.\n"
 
 # Start

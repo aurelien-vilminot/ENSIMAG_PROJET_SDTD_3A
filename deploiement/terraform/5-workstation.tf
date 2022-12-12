@@ -46,6 +46,18 @@ resource "google_compute_instance" "workstation_instance" {
         }
     }
 
+    provisioner "file" {
+        source = "${path.module}/../kubectl"
+        destination = "/home/kubespray/kubectl"
+
+        connection {
+            host = self.network_interface.0.access_config.0.nat_ip
+            user = "kubespray"
+            private_key = "${file("id_rsa")}"
+            agent = "false"
+        }
+    }
+
     service_account {
         email  = google_service_account.service_account.email
         scopes = ["cloud-platform", "compute-rw"]

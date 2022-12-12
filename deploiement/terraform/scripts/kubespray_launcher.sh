@@ -121,3 +121,6 @@ sed -i -e "/.*server: https:.*/c\    server: https://${ip_controller}:6443" kube
 echo export KUBECONFIG=$PWD/kubespray-do.conf >> /root/.bashrc
 source /root/.bashrc
 echo "Done.\n"
+
+# Deploy Script
+bash deploy_kubernetes.sh

@@ -47,6 +47,18 @@ resource "google_compute_instance" "workstation_instance" {
     }
 
     provisioner "file" {
+        source = "${path.module}/scripts/deploy_kubernetes.sh"
+        destination = "/home/kubespray/deploy_kubernetes.sh"
+
+        connection {
+            host = self.network_interface.0.access_config.0.nat_ip
+            user = "kubespray"
+            private_key = "${file("id_rsa")}"
+            agent = "false"
+        }
+    }
+
+    provisioner "file" {
         source = "${path.module}/../kubectl"
         destination = "/home/kubespray/kubectl"
 

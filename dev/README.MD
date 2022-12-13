@@ -101,23 +101,41 @@ Pour exécuter Kafka en local :
 5. The tutorial explains how to test with a broker server down or pending, then explains how to implement pod topology
    to spread pods across different domains.
 
-* https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
+- https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
 
 1. Defining Kafka namespace : `kubectl apply -f ./yaml/namespace.yaml`
 2.
 
 # Docker
 
+Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges,
+il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la commande `docker ps` puis `docker logs [container-name]`
+
+Deux options existent pour démarrer le conteneur :
+
+## Pull & run
+
 1. Se placer dans le répertoire `dev/docker/`
-2. Saisir les commandes suivantes :
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, pull les images, et lancer le conteneur :
+
 ```
 docker-compose stop
-docker-compose build
+docker-compose rm -f
+docker-compose pull
 docker-compose up -d
 ```
 
-Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, 
-il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop.
+## Build & run
+
+1. Se placer dans le répertoire `dev/docker/build`
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, build les images, et lancer le conteneur :
+
+```
+docker-compose stop
+docker-compose rm -f
+docker-compose build
+docker-compose up -d
+```
 
 # Performances [dev]
 

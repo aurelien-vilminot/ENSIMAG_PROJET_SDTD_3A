@@ -29,6 +29,16 @@ docker-compose build
 docker-compose up -d
 ```
 
+# How to push to Docker Hub
+
+Pour chaque Dockerfile, faire la suite de commandes suivante:
+
+```
+docker login -u LOGIN (ex: docker login -u thecsmine)
+docker tag IMG_NAME:VERSION LOGIN/REPO:IMG_NAME (ex: docker tag docker-zookeeper:latest thecsmine/sdtd:zookeeper)
+docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)
+```
+
 # Performances [dev]
 
 `re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient

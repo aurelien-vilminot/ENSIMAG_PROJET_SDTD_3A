@@ -34,6 +34,7 @@ docker-compose up -d
 Pour chaque Dockerfile, faire la suite de commandes suivante:
 
 ```
+docker-compose build (if the images are not yet built)
 docker login -u LOGIN (ex: docker login -u thecsmine)
 docker tag IMG_NAME:VERSION LOGIN/REPO:IMG_NAME (ex: docker tag docker-zookeeper:latest thecsmine/sdtd:zookeeper)
 docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)

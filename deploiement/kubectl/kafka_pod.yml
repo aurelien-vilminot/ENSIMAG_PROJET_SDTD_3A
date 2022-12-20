@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-cluster
+  labels:
+    app: kcluster
+spec:
+  containers:
+    - name: zookeeper
+      imagePullPolicy: Always
+      image: thecsmine/sdtd:zookeeper
+      tty: true
+      ports:
+        - containerPort: 2181
+    - name: kafka
+      imagePullPolicy: Always
+      image: thecsmine/sdtd:kafka
+      tty: true
+    - name: consumer
+      imagePullPolicy: Always
+      image: thecsmine/sdtd:consumer
+      tty: true
+    - name: producer
+      imagePullPolicy: Always
+      image: thecsmine/sdtd:producer
+      tty: true
+      ports:
+        - containerPort: 9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  labels:
+    app: kafka-service
+spec:
+  ports:
+    - name: zookeeper
+      port: 2181
+      targetPort: 2181
+    - name: producer
+      port: 9092
+      targetPort: 9092
+  selector:
+    app: kcluster
+  type: ClusterIP

@@ -7,12 +7,12 @@ services:
     ports:
       - "2181:2181"
     tty: true
-  kafka:
+  broker:
     build:
       context: ../..
-      dockerfile: ./docker/image/kafka.Dockerfile
-    depends_on:
-      - "zookeeper"
+      dockerfile: ./docker/image/broker.Dockerfile
+    ports:
+      - "9092:9092"
     tty: true
   consumer:
     build:
@@ -23,6 +23,4 @@ services:
     build:
       context: ../..
       dockerfile: ./docker/image/producer.Dockerfile
-    ports:
-      - "9092:9092"
     tty: true

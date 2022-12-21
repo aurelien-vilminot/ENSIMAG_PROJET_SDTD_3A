@@ -7,25 +7,26 @@ metadata:
 spec:
   containers:
     - name: zookeeper
-      imagePullPolicy: Always
-      image: thecsmine/sdtd:zookeeper
+      imagePullPolicy: Never
+      image: image-zookeeper
       tty: true
       ports:
         - containerPort: 2181
-    - name: kafka
-      imagePullPolicy: Always
-      image: thecsmine/sdtd:kafka
-      tty: true
-    - name: consumer
-      imagePullPolicy: Always
-      image: thecsmine/sdtd:consumer
-      tty: true
-    - name: producer
-      imagePullPolicy: Always
-      image: thecsmine/sdtd:producer
+    - name: broker
+      imagePullPolicy: Never
+      image: image-broker
       tty: true
       ports:
         - containerPort: 9092
+    - name: consumer
+      imagePullPolicy: Never
+      image: image-consumer
+      tty: true
+    - name: producer
+      imagePullPolicy: Never
+      image: image-producer
+      tty: true
+      
 ---
 apiVersion: v1
 kind: Service
@@ -38,7 +39,7 @@ spec:
     - name: zookeeper
       port: 2181
       targetPort: 2181
-    - name: producer
+    - name: broker
       port: 9092
       targetPort: 9092
   selector:

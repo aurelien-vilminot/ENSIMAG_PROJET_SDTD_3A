@@ -7,10 +7,10 @@ services:
     ports:
       - "2181:2181"
     tty: true
-  kafka:
+  broker:
     build:
       context: ../..
-      dockerfile: ./docker/build/kafka.Dockerfile
+      dockerfile: ./docker/build/broker.Dockerfile
     depends_on:
       - "zookeeper"
     tty: true

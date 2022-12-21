@@ -15,8 +15,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: zookeeper
-          imagePullPolicy: Always
-          image: thecsmine/sdtd:zookeeper
+          imagePullPolicy: Never
+          image: image-zookeeper
           tty: true
           ports:
             - containerPort: 2181
@@ -38,8 +38,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: broker
-          imagePullPolicy: Always
-          image: thecsmine/sdtd:broker
+          imagePullPolicy: Never
+          image: image-broker
           tty: true
           ports:
             - containerPort: 9092
@@ -61,8 +61,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: consumer
-          imagePullPolicy: Always
-          image: thecsmine/sdtd:consumer
+          imagePullPolicy: Never
+          image: image-consumer
           tty: true
 ---
 apiVersion: apps/v1
@@ -82,8 +82,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: producer
-          imagePullPolicy: Always
-          image: thecsmine/sdtd:producer
+          imagePullPolicy: Never
+          image: image-producer
           tty: true
 ---
 apiVersion: v1

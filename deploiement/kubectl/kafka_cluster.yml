@@ -12,7 +12,7 @@ spec:
       labels:
         app: kzookeeper
     spec:
-      restartPolicy: No
+      restartPolicy: Never
       containers:
         - name: zookeeper
           imagePullPolicy: Always
@@ -35,7 +35,7 @@ spec:
       labels:
         app: kbroker
     spec:
-      restartPolicy: No
+      restartPolicy: Never
       containers:
         - name: broker
           imagePullPolicy: Always
@@ -58,7 +58,7 @@ spec:
       labels:
         app: kconsumer
     spec:
-      restartPolicy: No
+      restartPolicy: Never
       containers:
         - name: consumer
           imagePullPolicy: Always
@@ -79,7 +79,7 @@ spec:
       labels:
         app: kproducer
     spec:
-      restartPolicy: No
+      restartPolicy: Never
       containers:
         - name: producer
           imagePullPolicy: Always

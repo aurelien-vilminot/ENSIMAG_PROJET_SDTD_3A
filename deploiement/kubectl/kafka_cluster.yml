@@ -19,9 +19,13 @@ spec:
           image: thecsmine/sdtd:zookeeper
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
           ports:
             - containerPort: 2181
@@ -47,9 +51,13 @@ spec:
           image: thecsmine/sdtd:broker
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
           ports:
             - containerPort: 9092
@@ -75,9 +83,13 @@ spec:
           image: thecsmine/sdtd:consumer
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
 ---
 apiVersion: apps/v1
@@ -101,9 +113,13 @@ spec:
           image: thecsmine/sdtd:producer
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
 ---
 apiVersion: v1
@@ -131,17 +147,16 @@ spec:
       targetPort: 9092
   selector:
     app: kbroker
-#---
-#apiVersion: v1
-#kind: ResourceQuota
-#metadata:
-#  name: compute-resources
-#spec:
-#  hard:
-#    pods: "4"
-#    requests.cpu: "1"
-#    requests.ephemeral-storage: 1Gi
-#    requests.ephemeral-storage: 2Gi
-#    limits.cpu: "2"
-#    limits.ephemeral-storage: 2Gi
-#    limits.ephemeral-storage: 4Gi
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-resources
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    requests.ephemeral-storage: 2Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    limits.ephemeral-storage: 4Gi

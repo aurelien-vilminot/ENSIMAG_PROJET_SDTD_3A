@@ -1,28 +1,20 @@
 version: "2"
 services:
   zookeeper:
-    build:
-      context: ..
-      dockerfile: ./docker/zookeeper.Dockerfile
+    image: thecsmine/sdtd:zookeeper
     ports:
       - "2181:2181"
     tty: true
   kafka:
-    build:
-      context: ..
-      dockerfile: ./docker/kafka.Dockerfile
+    image: thecsmine/sdtd:kafka
     depends_on:
       - "zookeeper"
     tty: true
   consumer:
-    build:
-      context: ..
-      dockerfile: ./docker/consumer.Dockerfile
+    image: thecsmine/sdtd:consumer
     tty: true
   producer:
-    build:
-      context: ..
-      dockerfile: ./docker/producer.Dockerfile
+    image: thecsmine/sdtd:producer
     ports:
       - "9092:9092"
     tty: true

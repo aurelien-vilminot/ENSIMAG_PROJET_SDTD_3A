@@ -1,3 +1,56 @@
+# Docker
+
+Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges,
+il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la commande `docker ps` puis `docker logs [container-name]`
+
+Deux options existent pour démarrer le conteneur :
+
+## Pull & run
+
+1. Se placer dans le répertoire `dev/docker/`
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, pull les images, et lancer le conteneur :
+
+```
+docker-compose stop
+docker-compose rm -f
+docker-compose pull
+docker-compose up -d
+```
+
+## Build & run
+
+1. Se placer dans le répertoire `dev/docker/build`
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, build les images, et lancer le conteneur :
+
+```
+docker-compose stop
+docker-compose rm -f
+docker-compose build
+docker-compose up -d
+```
+
+# How to push to Docker Hub
+
+Pour chaque Dockerfile, faire la suite de commandes suivante:
+
+```
+docker-compose build (if the images are not yet built)
+docker login -u LOGIN (ex: docker login -u thecsmine)
+docker tag IMG_NAME:VERSION LOGIN/REPO:IMG_NAME (ex: docker tag docker-zookeeper:latest thecsmine/sdtd:zookeeper)
+docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)
+```
+
+# Performances [dev]
+
+`re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient
+3100ns vs 1000ns => l'expression régulière est donc trop coûteuse par rapport à la fonction native Python.
+
+`clean_tweet(tweet_content: str)` : avec des expressions régulières, 0.95s. Sans, 0.56s.
+
+`word_tokenize(tweet_content, language="english")` vs `tweet_content.split(" ")` : 24s vs 4s => problème, pas le même
+nombre de bad words à la fin du programme. Par exemple, pour le tweet "_nazi,_" nltk extrait uniquement le mot "_nazi_"
+alors que `split(" ")` laisse la virgule ce qui empêche la détection du mot.
+
 # Kafka
 
 Pour exécuter Kafka en local :
@@ -101,31 +154,7 @@ Pour exécuter Kafka en local :
 5. The tutorial explains how to test with a broker server down or pending, then explains how to implement pod topology
    to spread pods across different domains.
 
-* https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
+- https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
 
 1. Defining Kafka namespace : `kubectl apply -f ./yaml/namespace.yaml`
-2.
-
-# Docker
-
-1. Se placer dans le répertoire `dev/docker/`
-2. Saisir les commandes suivantes :
-```
-docker-compose stop
-docker-compose build
-docker-compose up -d
-```
-
-Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, 
-il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop.
-
-# Performances [dev]
-
-`re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient
-3100ns vs 1000ns => l'expression régulière est donc trop coûteuse par rapport à la fonction native Python.
-
-`clean_tweet(tweet_content: str)` : avec des expressions régulières, 0.95s. Sans, 0.56s.
-
-`word_tokenize(tweet_content, language="english")` vs `tweet_content.split(" ")` : 24s vs 4s => problème, pas le même
-nombre de bad words à la fin du programme. Par exemple, pour le tweet "_nazi,_" nltk extrait uniquement le mot "_nazi_"
-alors que `split(" ")` laisse la virgule ce qui empêche la détection du mot.
+2. todo

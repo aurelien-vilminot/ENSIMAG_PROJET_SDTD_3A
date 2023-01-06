@@ -1,0 +1,26 @@
+version: "2"
+services:
+  zookeeper:
+    build:
+      context: ../..
+      dockerfile: ./docker/image/zookeeper.Dockerfile
+    ports:
+      - "2181:2181"
+    tty: true
+  broker:
+    build:
+      context: ../..
+      dockerfile: ./docker/image/broker.Dockerfile
+    ports:
+      - "9092:9092"
+    tty: true
+  consumer:
+    build:
+      context: ../..
+      dockerfile: ./docker/image/consumer.Dockerfile
+    tty: true
+  producer:
+    build:
+      context: ../..
+      dockerfile: ./docker/image/producer.Dockerfile
+    tty: true

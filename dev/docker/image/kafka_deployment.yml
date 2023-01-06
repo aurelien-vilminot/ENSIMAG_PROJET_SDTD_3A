@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kzookeeper
+  template:
+    metadata:
+      labels:
+        app: kzookeeper
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: zookeeper
+          imagePullPolicy: Never
+          image: image-zookeeper
+          tty: true
+          ports:
+            - containerPort: 2181
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kbroker
+  template:
+    metadata:
+      labels:
+        app: kbroker
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: broker
+          imagePullPolicy: Never
+          image: image-broker
+          tty: true
+          ports:
+            - containerPort: 9092
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kconsumer
+  template:
+    metadata:
+      labels:
+        app: kconsumer
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: consumer
+          imagePullPolicy: Never
+          image: image-consumer
+          tty: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kproducer
+  template:
+    metadata:
+      labels:
+        app: kproducer
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: producer
+          imagePullPolicy: Never
+          image: image-producer
+          tty: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper
+spec:
+  ports:
+    - port: 2181
+      targetPort: 2181
+  selector:
+    app: kzookeeper
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  labels:
+    app: broker
+spec:
+  ports:
+    - port: 9092
+      targetPort: 9092
+  selector:
+    app: kbroker

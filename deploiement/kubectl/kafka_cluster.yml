@@ -19,9 +19,13 @@ spec:
           image: thecsmine/sdtd:zookeeper
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
           ports:
             - containerPort: 2181
@@ -47,9 +51,13 @@ spec:
           image: thecsmine/sdtd:broker
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
           ports:
             - containerPort: 9092
@@ -75,9 +83,13 @@ spec:
           image: thecsmine/sdtd:consumer
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
 ---
 apiVersion: apps/v1
@@ -101,9 +113,13 @@ spec:
           image: thecsmine/sdtd:producer
           resources:
             requests:
+              cpu: "500m"
               ephemeral-storage: "500Mi"
+              memory: "1Gi"
             limits:
+              cpu: "500m"
               ephemeral-storage: "1000Mi"
+              memory: "1Gi"
           tty: true
 ---
 apiVersion: v1

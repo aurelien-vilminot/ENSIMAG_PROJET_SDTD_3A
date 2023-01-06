@@ -17,6 +17,11 @@ spec:
         - name: zookeeper
           imagePullPolicy: Always
           image: thecsmine/sdtd:zookeeper
+          resources:
+            requests:
+              memory: "500Mi"
+            limits:
+              memory: "1000Mi"
           tty: true
           ports:
             - containerPort: 2181
@@ -40,6 +45,11 @@ spec:
         - name: broker
           imagePullPolicy: Always
           image: thecsmine/sdtd:broker
+          resources:
+            requests:
+              memory: "500Mi"
+            limits:
+              memory: "1000Mi"
           tty: true
           ports:
             - containerPort: 9092
@@ -63,6 +73,11 @@ spec:
         - name: consumer
           imagePullPolicy: Always
           image: thecsmine/sdtd:consumer
+          resources:
+            requests:
+              memory: "500Mi"
+            limits:
+              memory: "1000Mi"
           tty: true
 ---
 apiVersion: apps/v1
@@ -84,6 +99,11 @@ spec:
         - name: producer
           imagePullPolicy: Always
           image: thecsmine/sdtd:producer
+          resources:
+            requests:
+              memory: "500Mi"
+            limits:
+              memory: "1000Mi"
           tty: true
 ---
 apiVersion: v1

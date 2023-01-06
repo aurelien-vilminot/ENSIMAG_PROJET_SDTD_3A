@@ -9,6 +9,7 @@ fi
 export GOOGLE_CLOUD_PROJECT="$1"
 gcloud config set project $GOOGLE_CLOUD_PROJECT
 gcloud services enable compute.googleapis.com
+gcloud services enable logging.googleapis.com
 
 # Generate ssh-keys
 bash scripts/ssh-generate-keys.sh

@@ -96,25 +96,25 @@ Pour exécuter Kafka en local :
 
 - Zookeeper
 
-```
+```bash
 ./kafka/bin/zookeeper-server-start.sh ./zookeeper.properties
 ```
 
 - Serveur
 
-```
+```bash
 ./kafka/bin/kafka-server-start.sh ./server.properties
 ```
 
 - Création topic _tweepykafka_
 
-```
+```bash
 ./kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 2 --topic tweepykafka
 ```
 
 - Lister tous les topics
 
-```
+```bash
 ./kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 

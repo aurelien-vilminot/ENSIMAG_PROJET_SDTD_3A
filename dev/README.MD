@@ -64,31 +64,31 @@ Pour exécuter Kafka en local :
 
 - Zookeeper
 
-```
+```bash
 .\kafka\bin\windows\zookeeper-server-start.bat .\zookeeper.properties
 ```
 
 - Serveur
 
-```
+```bash
 .\kafka\bin\windows\kafka-server-start.bat .\server.properties
 ```
 
 - Création topic _tweepykafka_
 
-```
+```bash
 .\kafka\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 2 --topic tweepykafka
 ```
 
 - Lister tous les topics
 
-```
+```bash
 .\kafka\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --list
 ```
 
 - Supprimer tous les topics
 
-```
+```bash
 .\kafka\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic '*'
 ```
 

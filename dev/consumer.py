@@ -28,6 +28,8 @@ class TwitterConsumer:
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
         self._load_bad_words_files()
+        self.nb_tweet_consumed = 0
+        self.nb_bad_words = 0
 
     def consume_tweet(self) -> None:
         print("[Consumer] Listening!")
@@ -36,7 +38,6 @@ class TwitterConsumer:
             tweet_content = tweet_json['text']
 
             tweet_content = self._clean_tweet(tweet_content)
-            print(f"Received tweet: {tweet_content}")
             self.natural_language_process(tweet_content)
 
     def _clean_tweet(self, tweet_content: str) -> str:
@@ -97,8 +98,12 @@ class TwitterConsumer:
                 if sub_tweet_words in self.words_en[words_len]:
                     detected_bad_words.append(sub_tweet_words)
 
+        self.nb_tweet_consumed += 1
         if len(detected_bad_words) > 0:
-            print(f"\t ==> This tweet has {len(detected_bad_words)} bad words.\n{detected_bad_words}")
+            self.nb_bad_words += 1
+            if self.nb_bad_words % 10:
+                print(f'\t ==> {round(((self.nb_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words for a '
+                      f'total of {self.nb_tweet_consumed}.')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if

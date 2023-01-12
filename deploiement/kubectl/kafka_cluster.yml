@@ -12,19 +12,18 @@ spec:
       labels:
         app: kzookeeper
     spec:
-      restartPolicy: Never
       containers:
         - name: zookeeper
           imagePullPolicy: Always
           image: thecsmine/sdtd:zookeeper
           resources:
             requests:
-              cpu: "250m"
-              ephemeral-storage: "1Gi"
+              cpu: "0.1"
+              ephemeral-storage: "100Mi"
               memory: "64Mi"
             limits:
-              cpu: "500m"
-              ephemeral-storage: "2Gi"
+              cpu: "0.3"
+              ephemeral-storage: "600Mi"
               memory: "128Mi"
           tty: true
           ports:
@@ -51,19 +50,18 @@ spec:
       labels:
         app: kbroker
     spec:
-      restartPolicy: Never
       containers:
         - name: broker
           imagePullPolicy: Always
           image: thecsmine/sdtd:broker
           resources:
             requests:
-              cpu: "250m"
-              ephemeral-storage: "1Gi"
+              cpu: "0.1"
+              ephemeral-storage: "100Mi"
               memory: "64Mi"
             limits:
-              cpu: "500m"
-              ephemeral-storage: "2Gi"
+              cpu: "0.3"
+              ephemeral-storage: "600Mi"
               memory: "128Mi"
           tty: true
           ports:
@@ -90,19 +88,18 @@ spec:
       labels:
         app: kconsumer
     spec:
-      restartPolicy: Never
       containers:
         - name: consumer
           imagePullPolicy: Always
           image: thecsmine/sdtd:consumer
           resources:
             requests:
-              cpu: "250m"
-              ephemeral-storage: "1Gi"
+              cpu: "0.1"
+              ephemeral-storage: "100Mi"
               memory: "64Mi"
             limits:
-              cpu: "500m"
-              ephemeral-storage: "2Gi"
+              cpu: "0.3"
+              ephemeral-storage: "600Mi"
               memory: "128Mi"
           tty: true
           volumeMounts:
@@ -127,19 +124,18 @@ spec:
       labels:
         app: kproducer
     spec:
-      restartPolicy: Never
       containers:
         - name: producer
           imagePullPolicy: Always
           image: thecsmine/sdtd:producer
           resources:
             requests:
-              cpu: "250m"
-              ephemeral-storage: "1Gi"
+              cpu: "0.1"
+              ephemeral-storage: "100Mi"
               memory: "64Mi"
             limits:
-              cpu: "500m"
-              ephemeral-storage: "2Gi"
+              cpu: "0.3"
+              ephemeral-storage: "600Mi"
               memory: "128Mi"
           tty: true
           volumeMounts:
@@ -183,9 +179,9 @@ metadata:
   name: compute-resources
 spec:
   hard:
-    requests.cpu: "500Mi"
-    requests.memory: 1Gi
-    requests.ephemeral-storage: 4Gi
-    limits.cpu: "1000Mi"
-    limits.memory: 2Gi
-    limits.ephemeral-storage: 8Gi
+    requests.cpu: "0.4"
+    requests.memory: 64Mi
+    requests.ephemeral-storage: 400Mi
+    limits.cpu: "1"
+    limits.memory: 512Mi
+    limits.ephemeral-storage: 3Gi

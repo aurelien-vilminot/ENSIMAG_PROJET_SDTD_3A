@@ -51,6 +51,8 @@ docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)
 nombre de bad words à la fin du programme. Par exemple, pour le tweet "_nazi,_" nltk extrait uniquement le mot "_nazi_"
 alors que `split(" ")` laisse la virgule ce qui empêche la détection du mot.
 
+Temps d'exécution du producer en local : `Timer producer : 53.463799715042114s`
+
 # Kafka
 
 Pour exécuter Kafka en local :

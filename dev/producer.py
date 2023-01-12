@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-"""API ACCESS KEYS"""
 import argparse
 import csv
 import json
@@ -92,7 +91,7 @@ class LocalProducer:
 
     def stream_tweets(self) -> None:
         for tweet_json in self.tweet_list:
-            print(f'Sent tweet: {tweet_json["text"]}')
+            # print(f'Sent tweet: {tweet_json["text"]}')
             self.producer.send(self.topic_name, value=tweet_json)
             self.producer.flush()
 

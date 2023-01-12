@@ -12,30 +12,30 @@ spec:
       labels:
         app: kzookeeper
     spec:
-      #      restartPolicy: Always
+      restartPolicy: Never
       containers:
         - name: zookeeper
           imagePullPolicy: Always
           image: thecsmine/sdtd:zookeeper
           resources:
             requests:
-              cpu: "500m"
-              ephemeral-storage: "4Gi"
-              memory: "1Gi"
+              cpu: "250m"
+              ephemeral-storage: "1Gi"
+              memory: "64Mi"
             limits:
               cpu: "500m"
-              ephemeral-storage: "8Gi"
-              memory: "1Gi"
+              ephemeral-storage: "2Gi"
+              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 2181
           volumeMounts:
-            - mountPath: /
+            - mountPath: /tmp/zookeeper/
               name: zookeeper-volume
       volumes:
         - name: zookeeper-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -51,30 +51,30 @@ spec:
       labels:
         app: kbroker
     spec:
-      #      restartPolicy: Always
+      restartPolicy: Never
       containers:
         - name: broker
           imagePullPolicy: Always
           image: thecsmine/sdtd:broker
           resources:
             requests:
-              cpu: "500m"
-              ephemeral-storage: "4Gi"
-              memory: "1Gi"
+              cpu: "250m"
+              ephemeral-storage: "1Gi"
+              memory: "64Mi"
             limits:
               cpu: "500m"
-              ephemeral-storage: "8Gi"
-              memory: "1Gi"
+              ephemeral-storage: "2Gi"
+              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 9092
           volumeMounts:
-            - mountPath: /
+            - mountPath: /tmp/kafka-logs/
               name: broker-volume
       volumes:
         - name: broker-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -90,28 +90,28 @@ spec:
       labels:
         app: kconsumer
     spec:
-      #      restartPolicy: Always
+      restartPolicy: Never
       containers:
         - name: consumer
           imagePullPolicy: Always
           image: thecsmine/sdtd:consumer
           resources:
             requests:
-              cpu: "500m"
-              ephemeral-storage: "500Mi"
-              memory: "1Gi"
+              cpu: "250m"
+              ephemeral-storage: "1Gi"
+              memory: "64Mi"
             limits:
               cpu: "500m"
-              ephemeral-storage: "1000Mi"
-              memory: "1Gi"
+              ephemeral-storage: "2Gi"
+              memory: "128Mi"
           tty: true
           volumeMounts:
-            - mountPath: /
+            - mountPath: /tmp/
               name: consumer-volume
       volumes:
         - name: consumer-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -127,28 +127,28 @@ spec:
       labels:
         app: kproducer
     spec:
-      #      restartPolicy: Always
+      restartPolicy: Never
       containers:
         - name: producer
           imagePullPolicy: Always
           image: thecsmine/sdtd:producer
           resources:
             requests:
-              cpu: "500m"
-              ephemeral-storage: "4Gi"
-              memory: "1Gi"
+              cpu: "250m"
+              ephemeral-storage: "1Gi"
+              memory: "64Mi"
             limits:
               cpu: "500m"
-              ephemeral-storage: "8Gi"
-              memory: "1Gi"
+              ephemeral-storage: "2Gi"
+              memory: "128Mi"
           tty: true
           volumeMounts:
-            - mountPath: /
+            - mountPath: /tmp/
               name: producer-volume
       volumes:
         - name: producer-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 1Gi
 
 ---
 apiVersion: v1
@@ -183,9 +183,9 @@ metadata:
   name: compute-resources
 spec:
   hard:
-    requests.cpu: "1"
+    requests.cpu: "500Mi"
     requests.memory: 1Gi
-    requests.ephemeral-storage: 8Gi
-    limits.cpu: "2"
+    requests.ephemeral-storage: 4Gi
+    limits.cpu: "1000Mi"
     limits.memory: 2Gi
     limits.ephemeral-storage: 8Gi

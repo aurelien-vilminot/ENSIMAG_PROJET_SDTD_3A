@@ -12,7 +12,7 @@ spec:
       labels:
         app: kzookeeper
     spec:
-#      restartPolicy: Always
+      #      restartPolicy: Always
       containers:
         - name: zookeeper
           imagePullPolicy: Always
@@ -29,6 +29,13 @@ spec:
           tty: true
           ports:
             - containerPort: 2181
+          volumeMounts:
+            - mountPath: /
+              name: zookeeper-volume
+      volumes:
+        - name: zookeeper-volume
+          emptyDir:
+            sizeLimit: 500Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,7 +51,7 @@ spec:
       labels:
         app: kbroker
     spec:
-#      restartPolicy: Always
+      #      restartPolicy: Always
       containers:
         - name: broker
           imagePullPolicy: Always
@@ -61,6 +68,13 @@ spec:
           tty: true
           ports:
             - containerPort: 9092
+          volumeMounts:
+            - mountPath: /
+              name: broker-volume
+      volumes:
+        - name: broker-volume
+          emptyDir:
+            sizeLimit: 500Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -76,7 +90,7 @@ spec:
       labels:
         app: kconsumer
     spec:
-#      restartPolicy: Always
+      #      restartPolicy: Always
       containers:
         - name: consumer
           imagePullPolicy: Always
@@ -91,6 +105,13 @@ spec:
               ephemeral-storage: "1000Mi"
               memory: "1Gi"
           tty: true
+          volumeMounts:
+            - mountPath: /
+              name: consumer-volume
+      volumes:
+        - name: consumer-volume
+          emptyDir:
+            sizeLimit: 500Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -106,7 +127,7 @@ spec:
       labels:
         app: kproducer
     spec:
-#      restartPolicy: Always
+      #      restartPolicy: Always
       containers:
         - name: producer
           imagePullPolicy: Always
@@ -121,6 +142,14 @@ spec:
               ephemeral-storage: "8Gi"
               memory: "1Gi"
           tty: true
+          volumeMounts:
+            - mountPath: /
+              name: producer-volume
+      volumes:
+        - name: producer-volume
+          emptyDir:
+            sizeLimit: 500Mi
+
 ---
 apiVersion: v1
 kind: Service

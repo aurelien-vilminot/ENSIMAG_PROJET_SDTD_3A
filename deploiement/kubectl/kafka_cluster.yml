@@ -16,15 +16,15 @@ spec:
         - name: zookeeper
           imagePullPolicy: Always
           image: thecsmine/sdtd:zookeeper
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
+          #          resources:
+          #            requests:
+          #              cpu: "0.1"
+          #              ephemeral-storage: "100Mi"
+          #              memory: "64Mi"
+          #            limits:
+          #              cpu: "0.3"
+          #              ephemeral-storage: "600Mi"
+          #              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 2181
@@ -54,15 +54,15 @@ spec:
         - name: broker
           imagePullPolicy: Always
           image: thecsmine/sdtd:broker
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
+          #          resources:
+          #            requests:
+          #              cpu: "0.1"
+          #              ephemeral-storage: "100Mi"
+          #              memory: "64Mi"
+          #            limits:
+          #              cpu: "0.3"
+          #              ephemeral-storage: "600Mi"
+          #              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 9092
@@ -92,15 +92,15 @@ spec:
         - name: consumer
           imagePullPolicy: Always
           image: thecsmine/sdtd:consumer
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
+          #          resources:
+          #            requests:
+          #              cpu: "0.1"
+          #              ephemeral-storage: "100Mi"
+          #              memory: "64Mi"
+          #            limits:
+          #              cpu: "0.3"
+          #              ephemeral-storage: "600Mi"
+          #              memory: "128Mi"
           tty: true
           volumeMounts:
             - mountPath: /tmp/
@@ -128,15 +128,15 @@ spec:
         - name: producer
           imagePullPolicy: Always
           image: thecsmine/sdtd:producer
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
+          #          resources:
+          #            requests:
+          #              cpu: "0.1"
+          #              ephemeral-storage: "100Mi"
+          #              memory: "64Mi"
+          #            limits:
+          #              cpu: "0.3"
+          #              ephemeral-storage: "600Mi"
+          #              memory: "128Mi"
           tty: true
           volumeMounts:
             - mountPath: /tmp/
@@ -177,15 +177,52 @@ spec:
     app: kbroker
   type: NodePort
 ---
-apiVersion: v1
-kind: ResourceQuota
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
 metadata:
-  name: compute-resources
+  name: kzookeeper-hpa
 spec:
-  hard:
-    requests.cpu: "0.4"
-    requests.memory: 64Mi
-    requests.ephemeral-storage: 400Mi
-    limits.cpu: "1"
-    limits.memory: 512Mi
-    limits.ephemeral-storage: 3Gi
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kzookeeper
+  minReplicas: 1
+  maxReplicas: 1
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 800Mi
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kbroker-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kbroker
+  minReplicas: 1
+  maxReplicas: 1
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 800Mi

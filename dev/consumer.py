@@ -100,7 +100,7 @@ class TwitterConsumer:
 
         self.nb_tweet_consumed += 1
         if len(detected_bad_words) > 0:
-            self.nb_bad_words += 1
+            self.nb_bad_words += len(detected_bad_words)
 
         if self.nb_tweet_consumed % 1000 == 0:
             # Percentage display every 1000 tweets analysed

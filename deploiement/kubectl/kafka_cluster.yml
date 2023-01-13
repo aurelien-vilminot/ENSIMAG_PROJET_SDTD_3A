@@ -156,9 +156,11 @@ metadata:
 spec:
   ports:
     - port: 2181
+      protocol: TCP
       targetPort: 2181
   selector:
     app: kzookeeper
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
@@ -169,9 +171,11 @@ metadata:
 spec:
   ports:
     - port: 9092
+      protocol: TCP
       targetPort: 9092
   selector:
     app: kbroker
+  type: NodePort
 ---
 apiVersion: v1
 kind: ResourceQuota

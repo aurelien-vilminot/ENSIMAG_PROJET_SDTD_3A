@@ -29,12 +29,17 @@ spec:
           ports:
             - containerPort: 2181
           volumeMounts:
-            - mountPath: /tmp/zookeeper/
-              name: zookeeper-volume
-      volumes:
-        - name: zookeeper-volume
-          emptyDir:
-            sizeLimit: 1Gi
+            - name: kafka-volume
+              mountPath: /mnt/kafka
+  volumeClaimTemplates:
+    - metadata:
+        name: kafka-volume
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -67,12 +72,17 @@ spec:
           ports:
             - containerPort: 9092
           volumeMounts:
-            - mountPath: /tmp/kafka-logs/
-              name: broker-volume
-      volumes:
-        - name: broker-volume
-          emptyDir:
-            sizeLimit: 1Gi
+            - name: broker-volume
+              mountPath: /mnt/broker
+  volumeClaimTemplates:
+    - metadata:
+        name: broker-volume
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -103,12 +113,17 @@ spec:
               memory: "128Mi"
           tty: true
           volumeMounts:
-            - mountPath: /tmp/
-              name: consumer-volume
-      volumes:
-        - name: consumer-volume
-          emptyDir:
-            sizeLimit: 1Gi
+            - name: consumer-volume
+              mountPath: /mnt/consumer
+  volumeClaimTemplates:
+    - metadata:
+        name: consumer-volume
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -139,12 +154,17 @@ spec:
               memory: "128Mi"
           tty: true
           volumeMounts:
-            - mountPath: /tmp/
-              name: producer-volume
-      volumes:
-        - name: producer-volume
-          emptyDir:
-            sizeLimit: 1Gi
+            - name: producer-volume
+              mountPath: /mnt/producer
+  volumeClaimTemplates:
+    - metadata:
+        name: producer-volume
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
 
 ---
 apiVersion: v1
@@ -176,16 +196,3 @@ spec:
   selector:
     app: kbroker
   type: NodePort
----
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: compute-resources
-spec:
-  hard:
-    requests.cpu: "0.4"
-    requests.memory: 64Mi
-    requests.ephemeral-storage: 400Mi
-    limits.cpu: "1"
-    limits.memory: 512Mi
-    limits.ephemeral-storage: 3Gi

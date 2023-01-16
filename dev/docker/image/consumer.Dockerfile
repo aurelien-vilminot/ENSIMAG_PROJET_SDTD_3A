@@ -17,4 +17,4 @@ COPY ../wait_for_server.sh ./
 RUN pip install -r requirements.txt
 
 # Run consumer after Kafka server started and wait 5s for producer start
-CMD bash -c "./wait_for_server.sh broker:9092 -- sleep 5; python3 ./consumer.py broker:9092 tweepykafka"
+CMD bash -c "./wait_for_server.sh broker:9092 -- sleep 10; python3 ./consumer.py broker:9092 tweepykafka"

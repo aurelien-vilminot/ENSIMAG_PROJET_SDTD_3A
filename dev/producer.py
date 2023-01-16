@@ -91,10 +91,14 @@ class LocalProducer:
             self.tweet_list = [{'text': tweet_content[11]} for tweet_content in csv_reader if tweet_content[11]]
 
     def stream_tweets(self) -> None:
-        for tweet_json in self.tweet_list:
-            print(f'Sent tweet: {tweet_json["text"]}')
+        for num, tweet_json in enumerate(self.tweet_list):
             self.producer.send(self.topic_name, value=tweet_json)
-            self.producer.flush()
+            if (num+1) % 10 == 0:
+                print(f"{num+1} tweets sent")
+            if (num+1) % 100 == 0:
+                print("Flushing")
+                self.producer.flush()
+                print("Finished flushing")
 
 
 if __name__ == "__main__":

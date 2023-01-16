@@ -21,10 +21,15 @@ class TwitterConsumer:
             bootstrap_servers=bootstrap_servers,
             # latest, earliest or none (https://www.conduktor.io/kafka/consumer-auto-offsets-reset-behavior)
             auto_offset_reset='earliest',
+            group_id=None,
+            max_poll_interval_ms=5000,
+            max_poll_records=1,
             enable_auto_commit=True,  # offsets are committed automatically
             auto_commit_interval_ms=5000,  # frequency of commits
+            fetch_min_bytes=1,
             fetch_max_bytes=1024,
-            max_poll_records=100,
+            fetch_max_wait_ms=0,
+            api_version=(0, 10, 1),
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
         self._load_bad_words_files()
@@ -34,6 +39,7 @@ class TwitterConsumer:
     def consume_tweet(self) -> None:
         print("[Consumer] Listening!")
         for message in self.consumer:
+            print("Message received")
             tweet_json = message.value
             tweet_content = tweet_json['text']
 

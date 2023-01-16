@@ -82,19 +82,19 @@ class LocalProducer:
     def __init__(self, producer: KafkaProducer, topic_name: str):
         self.producer = producer
         self.topic_name = topic_name
-        self.tweet_csv_file_path = Path(__file__).parent.joinpath("data/tweets_dataset.csv")
+        self.tweet_csv_file_path = Path(__file__).parent.joinpath("data/tweets.csv")
 
         with open(self.tweet_csv_file_path, "r", encoding='Latin1') as csv_file:
             csv_reader = csv.reader(csv_file)
             # Skip header
-            next(csv_reader)
-            self.tweet_list = [{'text': tweet_content[11]} for tweet_content in csv_reader if tweet_content[11]]
+            # next(csv_reader)
+            self.tweet_list = [{'text': tweet_content[0]} for tweet_content in csv_reader if tweet_content[0]]
 
     def stream_tweets(self) -> None:
         for num, tweet_json in enumerate(self.tweet_list):
             self.producer.send(self.topic_name, value=tweet_json)
-            if (num+1) % 1000 == 0:
-                print(f"{num+1} tweets sent")
+            if (num + 1) % 1000 == 0:
+                print(f"{num + 1} tweets sent")
         # Flush on exit
         self.producer.flush()
 

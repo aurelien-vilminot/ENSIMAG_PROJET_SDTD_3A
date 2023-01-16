@@ -93,12 +93,10 @@ class LocalProducer:
     def stream_tweets(self) -> None:
         for num, tweet_json in enumerate(self.tweet_list):
             self.producer.send(self.topic_name, value=tweet_json)
-            if (num+1) % 10 == 0:
+            if (num+1) % 1000 == 0:
                 print(f"{num+1} tweets sent")
-            if (num+1) % 100 == 0:
-                print("Flushing")
-                self.producer.flush()
-                print("Finished flushing")
+        # Flush on exit
+        self.producer.flush()
 
 
 if __name__ == "__main__":

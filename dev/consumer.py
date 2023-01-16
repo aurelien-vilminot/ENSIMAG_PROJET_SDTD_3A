@@ -21,15 +21,10 @@ class TwitterConsumer:
             bootstrap_servers=bootstrap_servers,
             # latest, earliest or none (https://www.conduktor.io/kafka/consumer-auto-offsets-reset-behavior)
             auto_offset_reset='earliest',
-            group_id=None,
             max_poll_interval_ms=5000,
-            max_poll_records=1,
+            max_poll_records=1000,
             enable_auto_commit=True,  # offsets are committed automatically
-            auto_commit_interval_ms=5000,  # frequency of commits
-            fetch_min_bytes=1,
-            fetch_max_bytes=1024,
-            fetch_max_wait_ms=0,
-            api_version=(0, 10, 1),
+            auto_commit_interval_ms=10000,  # frequency of commits
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
         self._load_bad_words_files()
@@ -39,12 +34,10 @@ class TwitterConsumer:
     def consume_tweet(self) -> None:
         print("[Consumer] Listening!")
         for message in self.consumer:
-            print("Message received")
             tweet_json = message.value
             tweet_content = tweet_json['text']
 
             tweet_content = self._clean_tweet(tweet_content)
-            print(f"Received {tweet_content}")
             self.natural_language_process(tweet_content)
 
     def _clean_tweet(self, tweet_content: str) -> str:
@@ -112,7 +105,7 @@ class TwitterConsumer:
         if self.nb_tweet_consumed % 1000 == 0:
             # Percentage display every 1000 tweets analysed
             print(f'\r\t ==> {round(((self.nb_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words for a '
-                  f'total of {self.nb_tweet_consumed} tweets.', end='')
+                  f'total of {self.nb_tweet_consumed} tweets.')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if

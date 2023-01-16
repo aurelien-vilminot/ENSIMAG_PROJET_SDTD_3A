@@ -5,3 +5,4 @@
 *.terraform.lock.hcl
 *.terraform
 *.terraform.tfstate.lock.info
+*tmp.md

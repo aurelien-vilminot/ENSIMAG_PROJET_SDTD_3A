@@ -105,7 +105,7 @@ class TwitterConsumer:
         if self.nb_tweet_consumed % 1000 == 0:
             # Percentage display every 1000 tweets analysed
             print(f'\r\t ==> {round(((self.nb_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words for a '
-                  f'total of {self.nb_tweet_consumed} tweets.', end='')
+                  f'total of {self.nb_tweet_consumed} tweets.')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if

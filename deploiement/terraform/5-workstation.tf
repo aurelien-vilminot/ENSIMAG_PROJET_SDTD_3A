@@ -5,6 +5,7 @@ resource "google_compute_instance" "workstation_instance" {
     boot_disk {
         initialize_params {
             image = "ubuntu-os-cloud/ubuntu-2204-lts"
+            size = 20
         }
     }
 

@@ -11,7 +11,7 @@ helm -n monitoring install kube-prometheus-stack prometheus-community/kube-prome
 # TODO wait kube-prometheus-stack-prometheus pods running
 sleep 60
 # TODO fix port 32000
-kubectl patch svc kube-prometheus-stack-prometheus -n monitoring -p '{"spec": {"type": "NodePort"}}}'
+kubectl patch svc kube-prometheus-stack-prometheus -n monitoring -p '{"spec": {"type": "NodePort"}}'
 echo "Done.\n"
 
 # App pods

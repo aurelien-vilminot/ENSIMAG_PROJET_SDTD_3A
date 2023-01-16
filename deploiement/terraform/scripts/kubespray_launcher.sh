@@ -104,9 +104,8 @@ LINE_SUPP=$(cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml | gre
 list_ip_controller=$(echo ${IPS_CONTROLLER[@]} | sed "s/ /, /g") 
 sed -i $LINE_SUPP's/.*/supplementary_addresses_in_ssl_keys: ['${list_ip_controller}']/' inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 
-# Add Loadbalancer GCP
-# echo "cloud_provider: gce" >> inventory/mycluster/group_vars/all/gcp.yml
-# echo "gce_node_tags: k8s-lb" >> inventory/mycluster/group_vars/all/gcp.yml
+# Access metrics
+sed -i 's/metrics_server_enabled: false/metrics_server_enabled: true/' inventory/mycluster/group_vars/k8s_cluster/addons.yml
 echo "Done.\n"
 
 # Start

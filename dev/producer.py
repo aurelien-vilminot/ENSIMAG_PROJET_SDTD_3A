@@ -68,12 +68,13 @@ class TwitterListener(tweepy.StreamingClient):
         print(f'Sent tweet: {tweet.text}')
         tweet_json = {'text': tweet.text, 'datetime': datetime.utcnow().timestamp(), 'lang': tweet.lang}
         self.producer.send(self.topic_name, value=tweet_json)
-        self.producer.flush()
 
     def on_errors(self, errors):
+        self.producer.flush()
         return super().on_errors(errors)
 
     def on_disconnect(self):
+        self.producer.flush()
         return super().on_disconnect()
 
 
@@ -91,7 +92,7 @@ class LocalProducer:
 
     def stream_tweets(self) -> None:
         for tweet_json in self.tweet_list:
-            # print(f'Sent tweet: {tweet_json["text"]}')
+            print(f'Sent tweet: {tweet_json["text"]}')
             self.producer.send(self.topic_name, value=tweet_json)
             self.producer.flush()
 

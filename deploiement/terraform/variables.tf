@@ -9,5 +9,5 @@ variable "region" {
 
 variable "number_workers" {
     type = number
-    default = 2
+    default = 5
 }

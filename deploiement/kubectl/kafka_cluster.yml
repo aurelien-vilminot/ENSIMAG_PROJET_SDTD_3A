@@ -16,30 +16,18 @@ spec:
         - name: zookeeper
           imagePullPolicy: Always
           image: thecsmine/sdtd:zookeeper
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 2181
+          resources:
+            limits:
+              ephemeral-storage: "1000Mi"
           volumeMounts:
-            - name: kafka-volume
-              mountPath: /mnt/kafka
-  volumeClaimTemplates:
-    - metadata:
-        name: kafka-volume
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
+            - name: zookeeper-volume
+              mountPath: /tmp/zookeeper
+      volumes:
+        - name: zookeeper-volume
+          emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,30 +47,18 @@ spec:
         - name: broker
           imagePullPolicy: Always
           image: thecsmine/sdtd:broker
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
           tty: true
           ports:
             - containerPort: 9092
+          resources:
+            limits:
+              ephemeral-storage: "1000Mi"
           volumeMounts:
             - name: broker-volume
-              mountPath: /mnt/broker
-  volumeClaimTemplates:
-    - metadata:
-        name: broker-volume
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
+              mountPath: /tmp/kafka-logs
+      volumes:
+        - name: broker-volume
+          emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -102,28 +78,10 @@ spec:
         - name: consumer
           imagePullPolicy: Always
           image: thecsmine/sdtd:consumer
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
           tty: true
-          volumeMounts:
-            - name: consumer-volume
-              mountPath: /mnt/consumer
-  volumeClaimTemplates:
-    - metadata:
-        name: consumer-volume
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
+          resources:
+            limits:
+              ephemeral-storage: "1000Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -143,29 +101,10 @@ spec:
         - name: producer
           imagePullPolicy: Always
           image: thecsmine/sdtd:producer
-          resources:
-            requests:
-              cpu: "0.1"
-              ephemeral-storage: "100Mi"
-              memory: "64Mi"
-            limits:
-              cpu: "0.3"
-              ephemeral-storage: "600Mi"
-              memory: "128Mi"
           tty: true
-          volumeMounts:
-            - name: producer-volume
-              mountPath: /mnt/producer
-  volumeClaimTemplates:
-    - metadata:
-        name: producer-volume
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
-
+          resources:
+            limits:
+              ephemeral-storage: "1000Mi"
 ---
 apiVersion: v1
 kind: Service

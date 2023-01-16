@@ -38,6 +38,7 @@ class TwitterConsumer:
             tweet_content = tweet_json['text']
 
             tweet_content = self._clean_tweet(tweet_content)
+            print(f"Received {tweet_content}")
             self.natural_language_process(tweet_content)
 
     def _clean_tweet(self, tweet_content: str) -> str:

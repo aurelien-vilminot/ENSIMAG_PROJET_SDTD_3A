@@ -106,6 +106,7 @@ sed -i $LINE_SUPP's/.*/supplementary_addresses_in_ssl_keys: ['${list_ip_controll
 
 # Access metrics
 sed -i 's/metrics_server_enabled: false/metrics_server_enabled: true/' inventory/mycluster/group_vars/k8s_cluster/addons.yml
+echo "kube_proxy_metrics_bind_address: 0.0.0.0:10249" >> inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 echo "Done.\n"
 
 # Start

@@ -7,12 +7,17 @@ kubectl create ns monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm -n monitoring install kube-prometheus-stack prometheus-community/kube-prometheus-stack
-kubectl -n monitoring wait --for=condition=Running pod/prometheus-kube-prometheus-stack-prometheus-0 --timeout=60s
+
+# Configure Prometheus NodePort
+kubectl -n monitoring wait --for=condition=Running pod/prometheus-kube-prometheus-stack-prometheus-0 --timeout=120s
 kubectl patch svc kube-prometheus-stack-prometheus -n monitoring -p '{"spec": {"type": "NodePort", "ports": [{"nodePort": 32000, "port": 9090, "protocol": "TCP", "targetPort": 9090}]}}'
 
-# Wait for grafana to be ready and configure the NodePort
-sleep 60
+# Configure Grafana NodePort
 kubectl patch svc kube-prometheus-stack-grafana -n monitoring -p '{"spec": {"type": "NodePort", "ports": [{"nodePort": 32001, "port": 80, "protocol": "TCP", "targetPort": 3000}]}}'
+
+# Configure Alertmanager NodePort
+kubectl patch svc kube-prometheus-stack-alertmanager -n monitoring -p '{"spec": {"type": "NodePort", "ports": [{"nodePort": 32002, "port": 9093, "protocol": "TCP", "targetPort": 9093}]}}'
+
 echo "Done.\n"
 
 # App pods

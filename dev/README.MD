@@ -1,7 +1,8 @@
 # Docker
 
 Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges,
-il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la commande `docker ps` puis `docker logs [container-name]`
+il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la
+commande `docker ps` puis `docker logs [container-name]`
 
 Deux options existent pour démarrer le conteneur :
 
@@ -52,6 +53,8 @@ nombre de bad words à la fin du programme. Par exemple, pour le tweet "_nazi,_"
 alors que `split(" ")` laisse la virgule ce qui empêche la détection du mot.
 
 Temps d'exécution du producer en local : `Timer producer : 53.463799715042114s`
+
+11.14% of bad words for a total of 983000 tweets.
 
 # Kafka
 

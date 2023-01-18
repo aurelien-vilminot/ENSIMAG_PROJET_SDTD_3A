@@ -79,7 +79,7 @@ class TwitterConsumer:
         return content
 
     def natural_language_process(self, tweet_content: str) -> None:
-        # Work only with english language (TODO for french)
+        # Work only with english language
         tweet_words = word_tokenize(tweet_content, language="english")
         detected_bad_words = []
         for words_len in self.words_en:
@@ -114,13 +114,6 @@ class TwitterConsumer:
         for words_len, filename_en in enumerate(filenames_en):
             self.words_en[words_len + 1] = DataProcessor.get_set_from_csv(
                 Path(__file__).parent.joinpath(f"data/{filename_en}"))
-
-        filenames_fr = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if
-                        re.match("bad_words_fr_[0-9]*.csv", str(x))]
-        self.words_fr = dict()
-        for words_len, filename_fr in enumerate(filenames_fr):
-            self.words_fr[words_len + 1] = DataProcessor.get_set_from_csv(
-                Path(__file__).parent.joinpath(f"data/{filename_fr}"))
 
 
 if __name__ == "__main__":

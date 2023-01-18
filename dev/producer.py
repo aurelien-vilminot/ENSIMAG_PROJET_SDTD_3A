@@ -86,8 +86,6 @@ class LocalProducer:
 
         with open(self.tweet_csv_file_path, "r", encoding='Latin1') as csv_file:
             csv_reader = csv.reader(csv_file)
-            # Skip header
-            # next(csv_reader)
             self.tweet_list = [{'text': tweet_content[0]} for tweet_content in csv_reader if tweet_content[0]]
 
     def stream_tweets(self) -> None:

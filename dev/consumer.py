@@ -29,6 +29,7 @@ class TwitterConsumer:
 
         self._load_bad_words_files()
         self.nb_tweet_consumed = 0
+        self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
     def consume_tweet(self) -> None:
@@ -101,11 +102,13 @@ class TwitterConsumer:
         self.nb_tweet_consumed += 1
         if len(detected_bad_words) > 0:
             self.nb_bad_words += len(detected_bad_words)
+            self.nb_tweet_with_bad_words += 1
 
         if self.nb_tweet_consumed % 1000 == 0:
             # Percentage display every 1000 tweets analysed
-            print(f'\r\t ==> {round(((self.nb_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words for a '
-                  f'total of {self.nb_tweet_consumed} tweets.')
+            print(
+                f'\t ==> {round(((self.nb_tweet_with_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words '
+                f'for a total of {self.nb_tweet_consumed} tweets ({self.nb_bad_words} bad words in total).')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if

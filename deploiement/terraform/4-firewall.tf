@@ -19,7 +19,7 @@ resource "google_compute_firewall" "internal_rules" {
 resource "google_compute_firewall" "external_rules" {
     name = "external-rules"
     allow {
-        ports = [ "22", "80", "443", "6443", "32000", "32001", "32002"]
+        ports = [ "22", "80", "443", "587", "6443", "32000", "32001", "32002"]
         protocol = "tcp"
     }
     allow {

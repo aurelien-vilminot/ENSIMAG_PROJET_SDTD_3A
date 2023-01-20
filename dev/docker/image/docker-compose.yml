@@ -19,6 +19,11 @@ services:
       context: ../..
       dockerfile: ./docker/image/consumer.Dockerfile
     tty: true
+  stats_consumer:
+    build:
+      context: ../..
+      dockerfile: ./docker/image/stats_consumer.Dockerfile
+    tty: true
   producer:
     build:
       context: ../..

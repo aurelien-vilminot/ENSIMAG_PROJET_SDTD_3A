@@ -9,6 +9,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 from kafka import KafkaConsumer
+from kafka import KafkaProducer
 from process_word_list import DataProcessor
 
 nltk.download('punkt')
@@ -27,7 +28,10 @@ class TwitterConsumer:
             auto_commit_interval_ms=10000,  # frequency of commits
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
+        self.stats_producer = StatsProducer("stats", bootstrap_servers)
         self._load_bad_words_files()
+
+    def _init_counter(self):
         self.nb_tweet_consumed = 0
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
@@ -105,10 +109,14 @@ class TwitterConsumer:
             self.nb_tweet_with_bad_words += 1
 
         if self.nb_tweet_consumed % 1000 == 0:
-            # Percentage display every 1000 tweets analysed
-            print(
-                f'\t ==> {round(((self.nb_tweet_with_bad_words / self.nb_tweet_consumed) * 100), 2)}% of bad words '
-                f'for a total of {self.nb_tweet_consumed} tweets ({self.nb_bad_words} bad words in total).')
+            # Percentage send every 1000 tweets analysed
+            stats = {
+                'nb_tweet_with_bad_words': self.nb_tweet_with_bad_words,
+                'nb_tweet_consumed': self.nb_tweet_consumed,
+                'nb_bad_words': self.nb_bad_words
+            }
+            self.stats_producer.send_stats(stats)
+            self._init_counter()
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if
@@ -117,6 +125,18 @@ class TwitterConsumer:
         for words_len, filename_en in enumerate(filenames_en):
             self.words_en[words_len + 1] = DataProcessor.get_set_from_csv(
                 Path(__file__).parent.joinpath(f"data/{filename_en}"))
+
+
+class StatsProducer:
+    def __init__(self, topic_name: str, bootstrap_servers: list):
+        self.topic_name = topic_name
+        self.producer = KafkaProducer(
+            bootstrap_servers=bootstrap_servers,
+            value_serializer=lambda x: json.dumps(x).encode('utf8')
+        )
+
+    def send_stats(self, value: json) -> None:
+        self.producer.send(self.topic_name, value=value)
 
 
 if __name__ == "__main__":

@@ -30,6 +30,7 @@ class TwitterConsumer:
 
         self.stats_producer = StatsProducer("stats", bootstrap_servers)
         self._load_bad_words_files()
+        self._init_counter()
 
     def _init_counter(self):
         self.nb_tweet_consumed = 0

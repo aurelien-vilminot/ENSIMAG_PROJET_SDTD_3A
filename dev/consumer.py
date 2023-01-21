@@ -16,9 +16,10 @@ nltk.download('punkt')
 
 
 class TwitterConsumer:
-    def __init__(self, topic_name: str, bootstrap_servers: list):
+    def __init__(self, topic_name: str, group_id: str, bootstrap_servers: list):
         self.consumer = KafkaConsumer(
             topic_name,
+            # group_id=group_id,
             bootstrap_servers=bootstrap_servers,
             # latest, earliest or none (https://www.conduktor.io/kafka/consumer-auto-offsets-reset-behavior)
             auto_offset_reset='earliest',
@@ -41,6 +42,7 @@ class TwitterConsumer:
         print("[Consumer] Listening!")
         for message in self.consumer:
             tweet_json = message.value
+            print(tweet_json)
             tweet_content = tweet_json['text']
 
             tweet_content = self._clean_tweet(tweet_content)
@@ -151,9 +153,10 @@ if __name__ == "__main__":
              "coma."
     )
     parser.add_argument("topic_name", type=str, nargs=1, help="(str) The topic name")
+    parser.add_argument("group_id", type=str, nargs=1, help="(str) The group id")
     args = parser.parse_args()
     server_addresses = [address.strip() for address in args.bootstrap_servers[0].split(',')]
 
     # Init the producer
-    tc = TwitterConsumer(args.topic_name[0].strip(), server_addresses)
+    tc = TwitterConsumer(args.topic_name[0].strip(), args.group_id[0].strip(), server_addresses)
     tc.consume_tweet()

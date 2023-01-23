@@ -16,7 +16,7 @@ nltk.download('punkt')
 
 
 class TwitterConsumer:
-    def __init__(self, topic_name: str, group_id: str, bootstrap_servers: list):
+    def __init__(self, topic_name: str, bootstrap_servers: list):
         self.consumer = KafkaConsumer(
             topic_name,
             # group_id=group_id,
@@ -34,19 +34,29 @@ class TwitterConsumer:
         self._init_counter()
 
     def _init_counter(self):
-        self.nb_tweet_consumed = 0
-        self.nb_tweet_with_bad_words = 0
-        self.nb_bad_words = 0
+        self.stats_nb_tweet_consumed = 0
+        self.stats_nb_tweet_with_bad_words = 0
+        self.stats_nb_bad_words = 0
+        self.total_nb_tweet_consumed = 0
+        self.total_nb_tweet_with_bad_words = 0
+        self.total_nb_bad_words = 0
+
+    def _reset_counter(self):
+        self.stats_nb_tweet_consumed = 0
+        self.stats_nb_tweet_with_bad_words = 0
+        self.stats_nb_bad_words = 0
 
     def consume_tweet(self) -> None:
         print("[Consumer] Listening!")
         for message in self.consumer:
             tweet_json = message.value
-            print(tweet_json)
             tweet_content = tweet_json['text']
 
             tweet_content = self._clean_tweet(tweet_content)
             self.natural_language_process(tweet_content)
+        print("Flushing stats_producer...")
+        self.stats_producer.flush()
+        print("Flushing stats_producer finished")
 
     def _clean_tweet(self, tweet_content: str) -> str:
         # Remove user mentions
@@ -106,20 +116,26 @@ class TwitterConsumer:
                 if sub_tweet_words in self.words_en[words_len]:
                     detected_bad_words.append(sub_tweet_words)
 
-        self.nb_tweet_consumed += 1
+        self.stats_nb_tweet_consumed += 1
+        self.total_nb_tweet_consumed += 1
         if len(detected_bad_words) > 0:
-            self.nb_bad_words += len(detected_bad_words)
-            self.nb_tweet_with_bad_words += 1
+            self.stats_nb_bad_words += len(detected_bad_words)
+            self.total_nb_bad_words += len(detected_bad_words)
+            self.stats_nb_tweet_with_bad_words += 1
+            self.total_nb_tweet_with_bad_words += 1
 
-        if self.nb_tweet_consumed % 1000 == 0:
+        if self.total_nb_tweet_consumed % 1000 == 0:
             # Percentage send every 1000 tweets analysed
             stats = {
-                'nb_tweet_with_bad_words': self.nb_tweet_with_bad_words,
-                'nb_tweet_consumed': self.nb_tweet_consumed,
-                'nb_bad_words': self.nb_bad_words
+                'nb_tweet_with_bad_words': self.stats_nb_tweet_with_bad_words,
+                'nb_tweet_consumed': self.stats_nb_tweet_consumed,
+                'nb_bad_words': self.stats_nb_bad_words
             }
             self.stats_producer.send_stats(stats)
-            self._init_counter()
+            self._reset_counter()
+            self.log_stats()
+        if self.total_nb_tweet_consumed % 10000 == 0:
+            print(f'\t The {self.total_nb_tweet_consumed}th tweet is: {tweet_content}')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if
@@ -128,6 +144,11 @@ class TwitterConsumer:
         for words_len, filename_en in enumerate(filenames_en):
             self.words_en[words_len + 1] = DataProcessor.get_set_from_csv(
                 Path(__file__).parent.joinpath(f"data/{filename_en}"))
+
+    def log_stats(self) -> None:
+        print(
+            f'\t ==> {round(((self.total_nb_tweet_with_bad_words / self.total_nb_tweet_consumed) * 100), 2)}% of bad words '
+            f'for a total of {self.total_nb_tweet_consumed} tweets ({self.total_nb_bad_words} bad words in total).')
 
 
 class StatsProducer:
@@ -141,6 +162,9 @@ class StatsProducer:
     def send_stats(self, value: json) -> None:
         self.producer.send(self.topic_name, value=value)
 
+    def flush(self) -> None:
+        self.producer.flush()
+
 
 if __name__ == "__main__":
     # Parse args
@@ -153,10 +177,10 @@ if __name__ == "__main__":
              "coma."
     )
     parser.add_argument("topic_name", type=str, nargs=1, help="(str) The topic name")
-    parser.add_argument("group_id", type=str, nargs=1, help="(str) The group id")
+    # parser.add_argument("group_id", type=str, nargs=1, help="(str) The group id")
     args = parser.parse_args()
     server_addresses = [address.strip() for address in args.bootstrap_servers[0].split(',')]
 
     # Init the producer
-    tc = TwitterConsumer(args.topic_name[0].strip(), args.group_id[0].strip(), server_addresses)
+    tc = TwitterConsumer(args.topic_name[0].strip(), server_addresses)
     tc.consume_tweet()

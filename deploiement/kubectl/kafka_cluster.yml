@@ -63,9 +63,32 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-consumer
+  name: kafka-producer
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: kproducer
+  template:
+    metadata:
+      labels:
+        app: kproducer
+    spec:
+      containers:
+        - name: producer
+          imagePullPolicy: Always
+          image: thecsmine/sdtd:producer
+          tty: true
+          resources:
+            limits:
+              ephemeral-storage: "1000Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+spec:
+  replicas: 3
   selector:
     matchLabels:
       app: kconsumer
@@ -86,21 +109,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-producer
+  name: kafka-stats
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kproducer
+      app: kstats
   template:
     metadata:
       labels:
-        app: kproducer
+        app: kstats
     spec:
       containers:
-        - name: producer
+        - name: stats-consumer
           imagePullPolicy: Always
-          image: thecsmine/sdtd:producer
+          image: thecsmine/sdtd:stats_consumer
           tty: true
           resources:
             limits:

@@ -19,6 +19,7 @@ spec:
           tty: true
           ports:
             - containerPort: 2181
+            - containerPort: 2182
           resources:
             limits:
               ephemeral-storage: "1000Mi"
@@ -137,9 +138,15 @@ metadata:
     app: zookeeper
 spec:
   ports:
-    - port: 2181
+    - name: zookeeper
+      port: 2181
       protocol: TCP
       targetPort: 2181
+    - name: zookeeper-admin
+      port: 2182
+      protocol: TCP
+      targetPort: 2182
+      nodePort: 32182
   selector:
     app: kzookeeper
   type: NodePort

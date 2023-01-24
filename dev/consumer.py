@@ -16,10 +16,10 @@ nltk.download('punkt')
 
 
 class TwitterConsumer:
-    def __init__(self, topic_name: str, bootstrap_servers: list):
+    def __init__(self, topic_name: str, group_id: str, bootstrap_servers: list):
         self.consumer = KafkaConsumer(
             topic_name,
-            # group_id=group_id,
+            group_id=group_id,
             bootstrap_servers=bootstrap_servers,
             # latest, earliest or none (https://www.conduktor.io/kafka/consumer-auto-offsets-reset-behavior)
             auto_offset_reset='earliest',
@@ -29,6 +29,8 @@ class TwitterConsumer:
             auto_commit_interval_ms=10000,  # frequency of commits
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
+        self.topic_name = topic_name
+        self.group_id = group_id
         self.stats_producer = StatsProducer("stats", bootstrap_servers)
         self._load_bad_words_files()
         self._init_counter()
@@ -47,7 +49,7 @@ class TwitterConsumer:
         self.stats_nb_bad_words = 0
 
     def consume_tweet(self) -> None:
-        print("[Consumer] Listening!")
+        print(f"[Consumer] Listening on topic {self.topic_name} in group {self.group_id}!")
         for message in self.consumer:
             tweet_json = message.value
             tweet_content = tweet_json['text']
@@ -177,10 +179,10 @@ if __name__ == "__main__":
              "coma."
     )
     parser.add_argument("topic_name", type=str, nargs=1, help="(str) The topic name")
-    # parser.add_argument("group_id", type=str, nargs=1, help="(str) The group id")
+    parser.add_argument("group_id", type=str, nargs=1, help="(str) The group id")
     args = parser.parse_args()
     server_addresses = [address.strip() for address in args.bootstrap_servers[0].split(',')]
 
     # Init the producer
-    tc = TwitterConsumer(args.topic_name[0].strip(), server_addresses)
+    tc = TwitterConsumer(args.topic_name[0].strip(), args.group_id[0].strip(), server_addresses)
     tc.consume_tweet()

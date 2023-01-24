@@ -18,12 +18,13 @@ class StatsConsumer:
             auto_commit_interval_ms=10000,  # frequency of commits
             value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
+        self.topic_name = topic_name
         self.nb_tweet_consumed = 0
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
     def consume_tweet(self) -> None:
-        print("[Stats consumer] Listening!")
+        print(f"[Stats consumer] Listening on topic {self.topic_name}!")
         for message in self.consumer:
             stats_json = message.value
             self.nb_tweet_consumed += int(stats_json['nb_tweet_consumed'])

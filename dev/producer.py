@@ -33,7 +33,7 @@ class TwitterStreamer:
     def stream_tweets(self, stream_local_tweet=False):
         if stream_local_tweet:
             local_stream = LocalProducer(self.producer, self.topic_name)
-            print('[Producer] Streaming!')
+            print(f'[Producer] Streaming fake tweets on topic {self.topic_name}!')
             local_stream.stream_tweets()
         else:
             self.streaming_client = TwitterListener(self.bearer_token)
@@ -44,7 +44,7 @@ class TwitterStreamer:
             # streaming_client.sample() --> get all tweets
             # self.streaming_client.add_rules(tweepy.StreamRule('lang:en')) --> règle conjonctive, à associer avec autre chose...
             self.streaming_client.add_rules(tweepy.StreamRule('musk lang:en'))
-            print('[Producer] Streaming!')
+            print(f'[Producer] Streaming real tweets on topic {self.topic_name}!')
             # self.streaming_client.sample()
             self.streaming_client.filter()
 

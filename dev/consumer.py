@@ -136,8 +136,6 @@ class TwitterConsumer:
             self.stats_producer.send_stats(stats)
             self._reset_counter()
             self.log_stats()
-        if self.total_nb_tweet_consumed % 10000 == 0:
-            print(f'\t The {self.total_nb_tweet_consumed}th tweet is: {tweet_content}')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if

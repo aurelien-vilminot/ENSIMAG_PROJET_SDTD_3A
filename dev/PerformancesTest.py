@@ -15,12 +15,19 @@ class PerformancesTester:
         self.bad_tweet = []
         self._load_bad_words_files()
         self.times = []
-        self.tweet_csv_file_path = Path(__file__).parent.joinpath("data/tweets_dataset.csv")
+        self.tweet_csv_file_path = Path(__file__).parent.joinpath("data/tweets.csv")
         with open(self.tweet_csv_file_path, "r", encoding='Latin1') as csv_file:
             csv_reader = csv.reader(csv_file)
-            # Skip header
-            next(csv_reader)
-            self.tweet_list = [{'text': tweet_content[11]} for tweet_content in csv_reader if tweet_content[11]]
+            self.tweet_list = [{'text': tweet_content[0]} for tweet_content in csv_reader if tweet_content[0]]
+        self._init_counter()
+
+    def _init_counter(self):
+        self.stats_nb_tweet_consumed = 0
+        self.stats_nb_tweet_with_bad_words = 0
+        self.stats_nb_bad_words = 0
+        self.total_nb_tweet_consumed = 0
+        self.total_nb_tweet_with_bad_words = 0
+        self.total_nb_bad_words = 0
 
     def stream_tweets(self) -> None:
         for tweet_json in self.tweet_list:
@@ -67,7 +74,7 @@ class PerformancesTester:
         return content
 
     def natural_language_process(self, tweet_content: str) -> None:
-        # Work only with english language (TODO for french)
+        # Work only with english language
         tweet_words = word_tokenize(tweet_content, language="english")
         detected_bad_words = []
         for words_len in self.words_en:
@@ -86,9 +93,23 @@ class PerformancesTester:
                 if sub_tweet_words in self.words_en[words_len]:
                     detected_bad_words.append(sub_tweet_words)
 
+        self.stats_nb_tweet_consumed += 1
+        self.total_nb_tweet_consumed += 1
         if len(detected_bad_words) > 0:
-            # print(f"\t ==> This tweet has {len(detected_bad_words)} bad words.\n{detected_bad_words}")
-            self.bad_tweet.append(detected_bad_words)
+            self.stats_nb_bad_words += len(detected_bad_words)
+            self.total_nb_bad_words += len(detected_bad_words)
+            self.stats_nb_tweet_with_bad_words += 1
+            self.total_nb_tweet_with_bad_words += 1
+
+        if self.total_nb_tweet_consumed % 1000 == 0:
+            # Percentage send every 1000 tweets analysed
+
+            self.log_stats()
+
+    def log_stats(self) -> None:
+        print(
+            f'\t ==> {round(((self.total_nb_tweet_with_bad_words / self.total_nb_tweet_consumed) * 100), 2)}% of bad words '
+            f'for a total of {self.total_nb_tweet_consumed} tweets ({self.total_nb_bad_words} bad words in total).')
 
     def _load_bad_words_files(self) -> None:
         filenames_en = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if
@@ -97,13 +118,6 @@ class PerformancesTester:
         for words_len, filename_en in enumerate(filenames_en):
             self.words_en[words_len + 1] = DataProcessor.get_set_from_csv(
                 Path(__file__).parent.joinpath(f"data/{filename_en}"))
-
-        filenames_fr = [x for x in os.listdir(Path(__file__).parent.joinpath("data/")) if
-                        re.match("bad_words_fr_[0-9]*.csv", str(x))]
-        self.words_fr = dict()
-        for words_len, filename_fr in enumerate(filenames_fr):
-            self.words_fr[words_len + 1] = DataProcessor.get_set_from_csv(
-                Path(__file__).parent.joinpath(f"data/{filename_fr}"))
 
 
 if __name__ == "__main__":

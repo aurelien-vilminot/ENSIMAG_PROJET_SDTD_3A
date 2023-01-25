@@ -1,58 +1,63 @@
-# Projet Système Distribué pour le Traitement de Données
-
-Dépot contenant l'ensemble du projet système distribué pour le traitement de données.
+# Projet de Systèmes Distribués pour le Traitement de Données
 
 ## Équipe
 
-Alexis BRUNO
+* Alexis BRUNO
+* Laure CERUTTI
+* Damien CLAUZON
+* Félix GANDER
+* Arthur SARRY
+* Aurélien VILMINOT
 
-Laure CERUTTI
+## Organisation
 
-Damien CLAUZON
+Le dossier `deploiement/` contient les fichiers nécessaires pour que le déploiement de l'application se faire sur Google
+Cloud.
 
-Félix GANDER
+Le dossier `dev/` contient les ressources utilisées pour la partie développement de l'application. Ces fichiers ne sont
+pas directement utilisés par Google Cloud lors du déploiement. En effet, l'ensemble est contenu dans diverses images
+Docker présentent sur la plateforme Docker Hub.
 
-Arthur SARRY
-
-Aurélien VILMINOT
-
-## Mise en place de l'environnement GCE
+## Déploiement de l'application sur Google Cloud
 
 ### Démarrage
 
 1. Se rendre sur la console [Google Cloud](https://console.cloud.google.com)
 2. Démarrer un projet si ce n'est pas déjà fait
-3. Depuis le menu, se rendre dans _API et services_
-4. Ajouter le service **Compute Engine API** en cliquant sur _Activer les API et les services_
-5. Activer le _cloud shell_ via l'icône en haut à droite
-6. Dans la console _cloud shell_ venant de s'ouvrir :
+3. Prérequis, avoir activé le service Compute Engine (voir ci-dessous)
+4. Ouvrir le _cloud shell_ via l'icône en haut à droite
+5. Dans la console _cloud shell_ venant de s'ouvrir :
     ```
-    git clone https://gitlab.ensimag.fr/brunoal/sytd
+    git clone https://github.com/aurelien-vilminot/SDTD_Github
     cd ./deploiement/terraform
-    chmod 777 ./scripts/env.sh
     bash start.sh <id_projet_gcloud>
     ```
-7. Depuis le menu, se rendre dans *Compute Engine* > *Instances de VM*
-8. Sur l'instance **workstation**, cliquer sur _SSH_
-9. Dans la nouvelle fenêtre, exécuter les commandes suivantes pour avoir accès au logs de l'installation du cluster :
+6. Depuis le menu, se rendre dans *Compute Engine* > *Instances de VM*
+7. Sur l'instance **workstation**, cliquer sur _SSH_
+8. Dans la nouvelle fenêtre, exécuter les commandes suivantes pour avoir accès aux logs de l'installation du cluster :
     ```    
     sudo su 
     tail -f /var/log/syslog
     ```
-    NB: L'installation est terminée lorsque vous voyez : **Everything is setup. Cluster and Apps are ready to use!**
-10. Dans cette fenêtre, une fois l'installation terminée, exécuter les commandes suivantes pour avoir accès au remote kubectl :
-    ```    
-    sudo su 
-    cd /root/kubespray
-    source /root/.bashrc
-    kubectl get nodes
-    kubectl get pods
-    ```
+   NB : L'installation est terminée lorsque vous voyez : **_Everything is setup. Cluster and Apps are ready to use!_**
+9. Dans cette fenêtre, une fois l'installation terminée, exécuter les commandes suivantes pour avoir accès au _remote
+   kubectl_ :
+   ```
+   cd /root/kubespray
+   source /root/.bashrc
+   kubectl get nodes
+   kubectl get pods
+   ```
 
 ### Arrêt
 
 1. Quitter la fenêtre SSH de _workstation_
-2. Dans le _cloud shell_, saisir : `terraform destroy`
+2. Dans le _cloud shell_, toujours dans le répertoire `./deploiement/terraform` saisir : `terraform destroy`
+
+### Activation du service _Compute Engine API_ 
+
+1. Depuis le menu, se rendre dans _API et services_
+2. Ajouter le service **Compute Engine API** en cliquant sur _Activer les API et les services_
 
 ## Liens utiles
 

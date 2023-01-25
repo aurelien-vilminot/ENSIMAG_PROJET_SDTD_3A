@@ -1,3 +1,9 @@
+# Avant-propos
+
+Ce répertoire contient les fichiers utilisés par les images déployées sur Docker Hub. Il peut donc être consulté et/ou
+modifié sans impact sur le fonctionnement de l'application tant que les modifications ne sont pas poussées sur Docker
+Hub.
+
 # Docker
 
 Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges,
@@ -30,9 +36,9 @@ docker-compose build
 docker-compose up -d
 ```
 
-# How to push to Docker Hub
+# Docker Hub
 
-Pour chaque Dockerfile, faire la suite de commandes suivante:
+Pour déployer l'image sur Docker Hub, faire, pour chaque Dockerfile, les commandes suivantes:
 
 ```
 docker-compose build (if the images are not yet built)
@@ -41,7 +47,7 @@ docker tag IMG_NAME:VERSION LOGIN/REPO:IMG_NAME (ex: docker tag docker-zookeeper
 docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)
 ```
 
-# Performances [dev]
+# Performances (_notes pour l'équipe DEV_)
 
 `re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient
 3100ns vs 1000ns => l'expression régulière est donc trop coûteuse par rapport à la fonction native Python.
@@ -123,43 +129,7 @@ Pour exécuter Kafka en local :
 ./kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
-# Cluster
+# Ressources
 
 - https://learnk8s.io/kafka-ha-kubernetes
-
-1. Grab k3d executable [here](https://github.com/k3d-io/k3d/releases)
-
-2. Create a three-node cluster that spans three availability
-   zones: `./k3d.exe cluster create kube-cluster --agents 3 --k3s-node-label topology.kubernetes.io/zone=zone-a@agent:0 --k3s-node-label topology.kubernetes.io/zone=zone-b@agent:1 --k3s-node-label topology.kubernetes.io/zone=zone-c@agent:2`
-
-   Verify it is ready with: `kubectl get nodes`
-
-3. Define the resources required for a Kafka cluster then apply: `kubectl apply -f yaml/kafka.yaml`
-
-   Wait for the resources created to be ready with: `kubectl get -f yaml/kafka.yaml`
-
-   There is a StatefulSet with three ready Kafka broker pods and a service. It maintains the availability of the three
-   pods. Verify that with: `kubectl get pods` (you can try to delete with `kubectl delete pod kafka-0` and then check
-   again)
-
-   There are also three independent PersistentVolumeClaims for storing Kafka data, one for each broker. Verify that
-   with: `kubectl get pvc,pv`
-
-4. Get server's endpoints with: `kubectl describe service kafka-svc`
-
-   Copy the three IP addresses, and use them in the following commands to test out from a pod:
-   `kubectl run kafka-client --rm -ti --image bitnami/kafka:latest -- bash`
-
-   `kafka-console-producer.sh --topic test --request-required-acks all --bootstrap-server 10.42.0.11:9092,10.42.0.9:9092,10.42.1.4:9092`
-   --> write things here
-
-   `kafka-console-consumer.sh \ --topic test \ --from-beginning \ --bootstrap-server 10.42.0.11:9092,10.42.0.9:9092,10.42.1.4:9092`
-   --> will consume the things from before
-
-5. The tutorial explains how to test with a broker server down or pending, then explains how to implement pod topology
-   to spread pods across different domains.
-
 - https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
-
-1. Defining Kafka namespace : `kubectl apply -f ./yaml/namespace.yaml`
-2. todo

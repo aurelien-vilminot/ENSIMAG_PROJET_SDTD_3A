@@ -15,7 +15,7 @@ Deux options existent pour démarrer le conteneur :
 ## Pull & run
 
 1. Se placer dans le répertoire `dev/docker/`
-2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, pull les images, et lancer le conteneur :
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, pull les images et lancer le conteneur :
 
 ```
 docker-compose stop
@@ -27,7 +27,7 @@ docker-compose up -d
 ## Build & run
 
 1. Se placer dans le répertoire `dev/docker/build`
-2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, build les images, et lancer le conteneur :
+2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, build les images et lancer le conteneur :
 
 ```
 docker-compose stop
@@ -38,7 +38,7 @@ docker-compose up -d
 
 # Docker Hub
 
-Pour déployer l'image sur Docker Hub, faire, pour chaque Dockerfile, les commandes suivantes:
+Pour déployer l'image sur Docker Hub, faire, pour chaque Dockerfile, les commandes suivantes :
 
 ```
 docker-compose build (if the images are not yet built)

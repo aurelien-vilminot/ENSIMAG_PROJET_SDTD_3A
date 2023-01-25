@@ -11,7 +11,7 @@
 
 ## Organisation
 
-Le dossier `deploiement/` contient les fichiers nécessaires pour que le déploiement de l'application se faire sur Google
+Le dossier `deploiement/` contient les fichiers nécessaires pour que le déploiement de l'application se fasse sur Google
 Cloud.
 
 Le dossier `dev/` contient les ressources utilisées pour la partie développement de l'application. Ces fichiers ne sont
@@ -54,7 +54,7 @@ Docker présentent sur la plateforme Docker Hub.
 1. Quitter la fenêtre SSH de _workstation_
 2. Dans le _cloud shell_, toujours dans le répertoire `./deploiement/terraform` saisir : `terraform destroy`
 
-### Activation du service _Compute Engine API_ 
+### Activation du service _Compute Engine API_
 
 1. Depuis le menu, se rendre dans _API et services_
 2. Ajouter le service **Compute Engine API** en cliquant sur _Activer les API et les services_

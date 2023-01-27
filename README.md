@@ -48,10 +48,10 @@ Docker présentent sur la plateforme Docker Hub.
    kubectl get pods
    ```
 10. Pour accéder à Prometheus et Grafana, se rendre dans *Compute Engine* > *Instances de VM* et récupérer une adresse externe du cluster puis se connecter via un navigateur internet aux adresses suivantes : 
-   ```
-   Prometheus : http://X.X.X.X:32000
-   Grafana : http://X.X.X.X:32001
-   ```
+       ```
+       Prometheus : http://X.X.X.X:32000
+       Grafana : http://X.X.X.X:32001
+       ```
 
 ### Arrêt
 

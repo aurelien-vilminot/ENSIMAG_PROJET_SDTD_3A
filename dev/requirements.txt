@@ -1,3 +1,4 @@
 nltk==3.7
 kafka-python==2.0.2
 tweepy==4.12.1
+prometheus-client

@@ -3,7 +3,10 @@ import argparse
 import json
 
 from kafka import KafkaConsumer
+from prometheus_client import start_http_server, Summary
 
+# Create a metric to track time spent and requests made.
+REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
 
 class StatsConsumer:
     def __init__(self, topic_name: str, bootstrap_servers: list):
@@ -23,6 +26,7 @@ class StatsConsumer:
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
+    @REQUEST_TIME.time()
     def consume_tweet(self) -> None:
         print(f"[Stats consumer] Listening on topic {self.topic_name}!")
         for message in self.consumer:
@@ -51,6 +55,9 @@ if __name__ == "__main__":
     parser.add_argument("topic_name", type=str, nargs=1, help="(str) The topic name")
     args = parser.parse_args()
     server_addresses = [address.strip() for address in args.bootstrap_servers[0].split(',')]
+
+    # Start up the server to expose the metrics.
+    start_http_server(8088)
 
     # Init the producer
     sc = StatsConsumer(args.topic_name[0].strip(), server_addresses)

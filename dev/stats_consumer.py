@@ -26,12 +26,7 @@ class StatsConsumer:
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
-<<<<<<< HEAD
-    @REQUEST_TIME.time()
-    def consume_tweet(self) -> None:
-=======
     def consume_stats(self) -> None:
->>>>>>> af2979eff2ea14aa829cef2dcc9a1e155612a6e5
         print(f"[Stats consumer] Listening on topic {self.topic_name}!")
         for message in self.consumer:
             stats_json = message.value

@@ -43,10 +43,14 @@ Docker présentent sur la plateforme Docker Hub.
 9. Dans cette fenêtre, une fois l'installation terminée, exécuter les commandes suivantes pour avoir accès au _remote
    kubectl_ :
    ```
-   cd /root/kubespray
    source /root/.bashrc
    kubectl get nodes
    kubectl get pods
+   ```
+10. Pour accéder à Prometheus et Grafana, se rendre dans *Compute Engine* > *Instances de VM* et récupérer une adresse externe du cluster puis se connecter via un navigateur internet aux adresses suivantes : 
+   ```
+   Prometheus : http://X.X.X.X:32000
+   Grafana : http://X.X.X.X:32001
    ```
 
 ### Arrêt
@@ -57,7 +61,7 @@ Docker présentent sur la plateforme Docker Hub.
 ### Activation du service _Compute Engine API_
 
 1. Depuis le menu, se rendre dans _API et services_
-2. Ajouter le service **Compute Engine API** en cliquant sur _Activer les API et les services_
+2. Ajouter le service **Compute Engine API** et **Logging API** en cliquant sur _Activer les API et les services_
 
 ## Liens utiles
 

@@ -57,7 +57,7 @@ if __name__ == "__main__":
     server_addresses = [address.strip() for address in args.bootstrap_servers[0].split(',')]
 
     # Start up the server to expose the metrics.
-    start_http_server(8088)
+    start_http_server(8888)
 
     # Init the producer
     sc = StatsConsumer(args.topic_name[0].strip(), server_addresses)

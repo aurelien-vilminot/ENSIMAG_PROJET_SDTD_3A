@@ -26,6 +26,7 @@ class StatsConsumer:
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
+    @REQUEST_TIME.time()
     def consume_stats(self) -> None:
         print(f"[Stats consumer] Listening on topic {self.topic_name}!")
         for message in self.consumer:

@@ -23,7 +23,7 @@ class StatsConsumer:
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
-    def consume_tweet(self) -> None:
+    def consume_stats(self) -> None:
         print(f"[Stats consumer] Listening on topic {self.topic_name}!")
         for message in self.consumer:
             stats_json = message.value
@@ -54,4 +54,4 @@ if __name__ == "__main__":
 
     # Init the producer
     sc = StatsConsumer(args.topic_name[0].strip(), server_addresses)
-    sc.consume_tweet()
+    sc.consume_stats()

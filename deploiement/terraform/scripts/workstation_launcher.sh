@@ -19,6 +19,7 @@ git checkout 09748e80e936e0479314d5a5a120a3c4bd321ffa
 mv /home/kubespray/kubespray_launcher.sh /root/kubespray/
 mv /home/kubespray/kubectl /root/kubespray
 mv /home/kubespray/deploy_kubernetes.sh /root/kubespray/
+mv /home/kubespray/values.yaml /root/kubespray/
 pip3 install -r requirements.txt
 
 # Install kubernetes to use at remote

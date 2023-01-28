@@ -1,0 +1,20 @@
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs:
+      - job_name: "kafka"
+        static_configs:
+          - targets: ["REPLACEME:8888"]
+        metrics_path: /
+        scheme: http
+additionalPrometheusRules:
+  - name: alert-rules
+    groups:
+    - name: Kafka
+      rules:
+      - alert: KafkaConsumerSlow
+        expr: time_per_million_tweets >= 0.10
+        labels:
+          severity: "warning"
+        annotations:
+          summary: "The Kafka consumer is being too slow."
+          description: "The Kafka consumer is being too slow."

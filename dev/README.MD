@@ -6,35 +6,10 @@ Hub.
 
 # Docker
 
-Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges,
-il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la
-commande `docker ps` puis `docker logs [container-name]`
+Les images sont faites pour être lancés avec Kubernetes via `kubectl apply -f deploiement/kubectl/kafka_cluster.yml`, et non avec Docker Compose qui n'est utilisé ici que pour construire les images rapidement. Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la
+commande `docker ps` puis `docker logs [container-name]`.
 
 Deux options existent pour démarrer le conteneur :
-
-## Pull & run
-
-1. Se placer dans le répertoire `dev/docker/`
-2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, pull les images et lancer le conteneur :
-
-```
-docker-compose stop
-docker-compose rm -f
-docker-compose pull
-docker-compose up -d
-```
-
-## Build & run
-
-1. Se placer dans le répertoire `dev/docker/build`
-2. Saisir les commandes suivantes pour supprimer les conteneurs en cours, build les images et lancer le conteneur :
-
-```
-docker-compose stop
-docker-compose rm -f
-docker-compose build
-docker-compose up -d
-```
 
 # Docker Hub
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import time
 
 from kafka import KafkaConsumer
-from prometheus_client import start_http_server, Summary
+from prometheus_client import start_http_server, Gauge
 
-# Create a metric to track time spent and requests made.
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
 
 class StatsConsumer:
     def __init__(self, topic_name: str, bootstrap_servers: list):
@@ -26,15 +25,31 @@ class StatsConsumer:
         self.nb_tweet_with_bad_words = 0
         self.nb_bad_words = 0
 
-    @REQUEST_TIME.time()
     def consume_stats(self) -> None:
         print(f"[Stats consumer] Listening on topic {self.topic_name}!")
+
+        # Create a metric to track the time spent processing a million tweets.
+        prom_metric = Gauge('time_per_million_tweets', 'Time per million tweets')
+        prom_metric.set(0)
+        millions = 0
+
         for message in self.consumer:
+            # Start the timer
+            time_beg = time.time()
+
             stats_json = message.value
             self.nb_tweet_consumed += int(stats_json['nb_tweet_consumed'])
             self.nb_tweet_with_bad_words += int(stats_json['nb_tweet_with_bad_words'])
             self.nb_bad_words += int(stats_json['nb_bad_words'])
             self.log_stats()
+
+            # Update the metric
+            current_millions = self.nb_tweet_consumed // 1000000
+            if current_millions != millions:
+                millions = current_millions
+                prom_metric.set(0)
+            else:
+                prom_metric.inc(time.time() - time_beg)
 
     def log_stats(self) -> None:
         print(

@@ -1,15 +1,19 @@
 # Script to deploy pods on kubernetes (App + Prometheus)
 readonly username="kubespray"
 
+# Set the kafka-stats IP in the values.yaml file
+export SCRAPEIP="$(kubectl get pods -o=wide | grep kafka-stats | tr -s ' ' | cut -d ' ' -f 6)"
+sed -i "s/REPLACEME/$SCRAPEIP/g" values.yaml
+
 # Install kube prometheus stack
 echo "Deploy Prometheus..."
 kubectl create ns monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm -n monitoring install kube-prometheus-stack prometheus-community/kube-prometheus-stack
+helm -n monitoring install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f values.yaml
 
 # Configure Prometheus NodePort
-kubectl -n monitoring wait --for=condition=Running pod/prometheus-kube-prometheus-stack-prometheus-0 --timeout=120s
+kubectl -n monitoring wait --for=condition=Running pod/prometheus-kube-prometheus-stack-prometheus-0 --timeout=30s
 kubectl patch svc kube-prometheus-stack-prometheus -n monitoring -p '{"spec": {"type": "NodePort", "ports": [{"nodePort": 32000, "port": 9090, "protocol": "TCP", "targetPort": 9090}]}}'
 
 # Configure Grafana NodePort

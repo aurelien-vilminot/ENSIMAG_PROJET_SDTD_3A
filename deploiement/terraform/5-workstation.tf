@@ -60,6 +60,18 @@ resource "google_compute_instance" "workstation_instance" {
     }
 
     provisioner "file" {
+        source = "${path.module}/prometheus/values.yaml"
+        destination = "/home/kubespray/values.yaml"
+
+        connection {
+            host = self.network_interface.0.access_config.0.nat_ip
+            user = "kubespray"
+            private_key = "${file("id_rsa")}"
+            agent = "false"
+        }
+    }
+
+    provisioner "file" {
         source = "${path.module}/../kubectl"
         destination = "/home/kubespray/kubectl"
 

@@ -6,14 +6,17 @@ Hub.
 
 # Docker
 
-Les images sont faites pour être lancés avec Kubernetes via `kubectl apply -f deploiement/kubectl/kafka_cluster.yml`, et non avec Docker Compose qui n'est utilisé ici que pour construire les images rapidement. Kafka se lance alors en fond de tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, il faut ouvrir le terminal du docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la
+Les images sont faites pour être lancés avec Kubernetes via `kubectl apply -f deploiement/kubectl/kafka_cluster.yml`, et
+non avec Docker Compose qui n'est utilisé ici que pour construire les images rapidement. Kafka se lance alors en fond de
+tâche et les tweets sont transmis du producer au consumer. Pour observer les échanges, il faut ouvrir le terminal du
+docker concerné (producer ou consumer) via l'interface de Docker Desktop, ou avec la
 commande `docker ps` puis `docker logs [container-name]`.
 
 Deux options existent pour démarrer le conteneur :
 
 # Docker Hub
 
-Pour déployer l'image sur Docker Hub, faire, pour chaque Dockerfile, les commandes suivantes :
+Pour déployer l'image sur Docker Hub, faire, pour chaque Dockerfile, les commandes suivantes:
 
 ```
 docker-compose build (if the images are not yet built)
@@ -21,21 +24,6 @@ docker login -u LOGIN (ex: docker login -u thecsmine)
 docker tag IMG_NAME:VERSION LOGIN/REPO:IMG_NAME (ex: docker tag docker-zookeeper:latest thecsmine/sdtd:zookeeper)
 docker push LOGIN/REPO:IMG_NAME (ex: docker push thecsmine/sdtd:zookeeper)
 ```
-
-# Performances (_notes pour l'équipe DEV_)
-
-`re.sub("@\w*", "", content)` vs `content.replace("@", "")` : sur 55 900 appels sur un même jeu de tweets, on obtient
-3100ns vs 1000ns => l'expression régulière est donc trop coûteuse par rapport à la fonction native Python.
-
-`clean_tweet(tweet_content: str)` : avec des expressions régulières, 0.95s. Sans, 0.56s.
-
-`word_tokenize(tweet_content, language="english")` vs `tweet_content.split(" ")` : 24s vs 4s => problème, pas le même
-nombre de bad words à la fin du programme. Par exemple, pour le tweet "_nazi,_" nltk extrait uniquement le mot "_nazi_"
-alors que `split(" ")` laisse la virgule ce qui empêche la détection du mot.
-
-Temps d'exécution du producer en local : `Timer producer : 53.463799715042114s`
-
-11.14% of bad words for a total of 983000 tweets.
 
 # Kafka
 
@@ -106,5 +94,5 @@ Pour exécuter Kafka en local :
 
 # Ressources
 
-- https://learnk8s.io/kafka-ha-kubernetes
-- https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f
+- [Learnk8s - Deploy Kafka with Kubernetes](https://learnk8s.io/kafka-ha-kubernetes)
+- [Levelup - Kafka on Kubernetes](https://levelup.gitconnected.com/how-to-deploy-apache-kafka-with-kubernetes-9bd5caf7694f)

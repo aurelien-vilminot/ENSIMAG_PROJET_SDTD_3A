@@ -28,7 +28,7 @@ Docker présentent sur la plateforme Docker Hub.
 4. Ouvrir le _cloud shell_ via l'icône en haut à droite
 5. Dans la console _cloud shell_ venant de s'ouvrir :
     ```
-    git clone https://github.com/aurelien-vilminot/SDTD_Github
+    git clone https://github.com/aurelien-vilminot/ENSIMAG_PROJET_SDTD
     cd ./deploiement/terraform
     bash start.sh <id_projet_gcloud>
     ```
